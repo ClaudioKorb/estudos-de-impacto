@@ -1,5 +1,6 @@
-let socket;
-let myfallBody;
+let socket;         //socket used to send data to the server
+
+let myfallBody;     
 let bottomBarrier;
 let gravity = 9.81; //standard Earth gravity acceleration
 let framerate = 120;
@@ -7,6 +8,11 @@ let myTimer = new Timer();
 let timerFont;
 let fallHeight = 2; //meters
 let scale;
+let speedUnity = 0; //0 == m/s, 1 == km/h
+let canvasWidth = 400;
+let canvasHeight = 660;
+
+
 let fallButton = document.getElementById("fall-button");
 let resetButton = document.getElementById("reset-button");
 let fallHeigthText = document.getElementById('fall-height');
@@ -17,13 +23,18 @@ let speedUnityMS = document.getElementById('initial-velocity-dropdown-ms');
 let speedUnityKH = document.getElementById('initial-velocity-dropdown-kh');
 let speedUnityKS = document.getElementById('initial-velocity-dropdown-ks');
 let initVelocityCheck = document.getElementById('initial-velocity-check');
-let speedUnity = 0; //0 == m/s, 1 == km/h
+let questionTitle = document.getElementById('question-title');
+let questionBody = document.getElementById('question-body');
+let submitAnswer = document.getElementById('submit-answer');
+let startTest = document.getElementById('startButton');
+
 let loaded = false;
-let canvasWidth = 400;
-let canvasHeight = 660;
+let myQuestions;
+let currentQuestion = 0;
 let myID = '';
 
 function setup(){
+    //socket = io.connect('http://localhost:3000');
     socket = io.connect(document.location.origin);
 
     let canvas;
@@ -41,6 +52,52 @@ function setup(){
     textFont(timerFont);
     let cookies = cookieParser(document.cookie);
     myID = cookies['studentID'];
+    
+    if(cookies['login'] == 'ok'){
+        socket.emit('getQuestions', myID);
+    }else{
+        console.log('OPA '+myID);
+        let studentData = {
+            name : cookies['nome'],
+            id : myID
+        }
+        console.log(studentData);
+        socket.emit("newStudent", studentData);
+    }
+
+    socket.on('yourQuestions', function(data){
+        gotQuestions = true;
+        if(data){
+            console.log("Got My Questions");
+            console.log(data);
+            myQuestions = data;
+            questionTitle.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].title;
+            questionBody.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].text;    
+        }else{     
+            console.log('Numero de perguntas disponíveis é menor que o solicitado');
+        }
+    });
+
+    socket.on('checkAnswer', function(msgData){
+        if(msgData.correct == true){
+            alert("Correto");
+            myQuestions.correctQuestions[myQuestions.currentQuestion] = 1;
+            myQuestions.questionsWeight[myQuestions.currentQuestion] = 1;
+        }else{
+            alert("Errado");
+            myQuestions.correctQuestions[myQuestions.currentQuestion] = 0;
+            myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
+        }
+        socket.emit('currentQuestion', studentID);
+    });
+
+    socket.on('thisIsTheCurrentQuestion', function(questionIndex){
+        if(questionIndex = 'end'){
+            alert('FIM');
+        }else{
+            myQuestions.currentQuestion = questionIndex;
+        }
+    });
 }
 
 function preload(){
@@ -117,6 +174,17 @@ speedUnityKH.addEventListener('click', function(){
     speedUnity = 1;
 })
 
+submitAnswer.addEventListener('mousedown', function(){
+    let studentAnswer = document.forms['question-form'].answer.value;
+    let myId = cookieParser(document.cookie)['studentID'];
+    let answerData = {
+        question : myQuestions[currentQuestion].number,
+        answer : studentAnswer,
+        studentID : myId
+    }
+    socket.emit('answerQuestion', answerData);
+});
+
 fallButton.addEventListener('mousedown', function(){
     fallHeight = document.getElementById('fall-height-range').value;
     console.log("fallHeight = " + fallHeight);
@@ -145,6 +213,7 @@ resetButton.addEventListener('mousedown', function(){
     myTimer.reset();
     myfallBody = new fallBody(massInput.value);
 })
+
 
 function cookieParser(cookieString){
     if(!cookieString){

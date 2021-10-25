@@ -1,29 +1,17 @@
-let canvasWidth = 400;
-let canvasHeight = 660;
-let bodyDiameter = canvasWidth / 20;
-let fallDistancePx = canvasHeight - (bodyDiameter * 3);
-let fallDistanceMt = 10;
-let worldGravity = 9.81;
-let clientFramerate = 120;
-let clientSpeedUnit = 0;
-let scale = fallDistanceMt / fallDistancePx; // meters per pixel
+let studentClass = require('./student');
 const questions = require('./questions.json');
 const answers = require('./answers.json');
-let students = [];
+
+let students = new studentClass.studentList();
 let numberOfQuestions = 3;
+let socketMap = [];
+
 const PORT = process.env.PORT;
 
-let worldConfig = {
-    gravity : 9.81,
-    
-}
 let express = require('express');
 let app = express();
 
-//let server = app.listen(3000);
-let server = app.listen(PORT, ()=>{
-    console.log('Server listening on port ' + PORT);
-})
+let server = app.listen(PORT)
 app.use(express.static('public'));
 
 console.log("Socket server running...");
@@ -36,15 +24,7 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
     console.log("New connection: " + socket.id);
-    socket.on('animationPage', function(){
-        console.log('asdpoaskdpasjdpoas');
-        let canvasData = {
-            width : canvasWidth,
-            height : canvasHeight
-        }
-        socket.emit("canvasCreation",canvasData);    
-    });
-
+    
     socket.on('newStudent', function(studentData){
         let newQuestions = [];
         let newQuestionsNumbers = [];
@@ -55,38 +35,45 @@ function newConnection(socket){
                 newQuestionsNumbers.push(questions[candidateQuestion-1].number)
             }
         }
-        let newStudent = new student(studentData, newQuestions);
-        students.push(newStudent);
-    });
-
-    socket.on('getQuestions', function(studentID){
-        console.log(studentID);
-        let questionData = null;
-        for(const student of students){
-            if(student.id == studentID){
-                questionData = student.questions.questionData;
+        let newStudent = new studentClass.student(studentData, newQuestions);
+        if(students.addStudent(newStudent)){
+            console.log('Estudante <' + newStudent.id+'> não existe');
+            console.log('Novo estudante adicionado: ' + newStudent.name);
+            console.log('Numero de estudantes ativo: ' + students.list.length);
+            let studentSocket = {
+                studentID : newStudent.id,
+                socketID : socket.id
             }
+            socketMap.push(studentSocket);
+        }else{
+            console.log('Estudante já está cadastrado');
+            //changeSocketID(newStudent.id, socket.id);
         }
-        socket.emit('newQuestions', questionData);  
+        let questionData = null;
+        if(students.findStudentIndex(studentData.id) >= 0){
+            questionData = students.findStudent(studentData.id).questions;
+        }
+        socket.emit('yourQuestions', questionData);  
     })
 
-/*    socket.on('getQuestions', function(amount){
-        if(amount > questions.length){
-            socket.emit('newQuestions', null);
-        }else{
-            let newQuestions = [];
-            let newQuestionsNumbers = [];
-            while(newQuestions.length < amount){
-                let candidateQuestion = getRandomInt(1, questions.length);
-                if(!newQuestionsNumbers.includes(candidateQuestion)){
-                    newQuestions.push(questions[candidateQuestion-1]);
-                    newQuestionsNumbers.push(questions[candidateQuestion-1].number)
-                }
-            }
-            socket.emit('newQuestions', newQuestions);
+    socket.on('getQuestions', function(studentID){
+        console.log('Estudante ' + studentID + ' solicitou questões');
+        let questionData = null;
+        if(students.findStudentIndex(studentID) >= 0){
+            questionData = students.findStudent(studentID).questions;
         }
-    });
-*/
+        socket.emit('yourQuestions', questionData);  
+    })
+
+    socket.on('currentQuestion', function(studentID){
+        let thisStudent = students.findStudent(studentID);
+        if(thisStudent.questions.currentQuestion == thisStudent.questions.questionData.length){
+            socket.emit('thisIsTheCurrentQuestion', 'end');
+        }else{
+            socket.emit('thisIsTheCurrentQuestion', thisStudent.questions.currentQuestion);
+        }
+    })
+
     socket.on('answerQuestion', function(answerData){
         if(answerData){
             let rightAnswer = false;
@@ -104,10 +91,11 @@ function newConnection(socket){
                 }
             }
             if(rightAnswer){
-                studentIndex = findStudent(answerData.studentID);
-                students[studentIndex].markAsCorrect(answerData.question);
-                console.log("Estado das questoes: " + students[studentIndex].questions.correctQuestions);
+                studentIndex = students.findStudentIndex(answerData.studentID);
+                students.list[studentIndex].markAsCorrect(answerData.question);
 
+            }else{
+                //TO DO reduzir peso da questão para tentativas subsequentes
             }
             let msgData = {
                 question: answerData.question,
@@ -115,6 +103,10 @@ function newConnection(socket){
             }
             socket.emit('checkAnswer', msgData);
         }
+    })
+
+    socket.on('disconnect', function(){
+        console.log('disconnected');
     })
 }
 
@@ -130,58 +122,57 @@ if (!String.prototype.trim) {
     };
 }
 
-app.post('/', function(req, res) {
-    res.redirect('/animation.html');
-});
-
-class student{
-    constructor(studentData, studentQuestions){
-        this.name = studentData.name;
-        this.id = studentData.id;
-        this.questions = {
-            questionData : studentQuestions,
-            correctQuestions : [],
-            questionsWeight : []
-        }
-        for(let i = 0; i < numberOfQuestions; i++){
-            this.questions.correctQuestions.push(0);
-            this.questions.questionsWeight.push(1);
+function findSocketIndexBySudentID(studentID){
+    for(let i = 0; i < socketMap; i++){
+        if(socketMap[i].studentID == studentID){
+            return i;
         }
     }
+    return null;
+}
 
-    changeWeight(questionNumber, newWeight){
-        let index = this.indexOfQuestion(questionNumber)
-        if(index != -1){
-            this.questions.questionsWeight[index] = newWeight;
-            return newWeight;
-        }else{
-            return null;
+function findSocketIDBySudentID(studentID){
+    for(let i = 0; i < socketMap; i++){
+        if(socketMap[i].studentID == studentID){
+            return socketMap[i].socketID;
         }
     }
+    return null;
+}
 
-    markAsCorrect(questionNumber){
-        let index = this.indexOfQuestion(questionNumber);
-        console.log('questao acertada: ' + index);
-        this.questions.correctQuestions[index] = 1;
-    }
-
-    indexOfQuestion(questionNumber){
-        let index = -1;
-        for(let i = 0; i < this.questions.questionData.length; i++){
-            if(this.questions.questionData[i].number == questionNumber){
-                index = i;
-            }
+function findSocketIndexBySocketID(socketID){
+    for(let i = 0; i < socketMap; i++){
+        if(socketMap[i].socketID == socketID){
+            return i;
         }
-        return index;
+    }
+    return null;
+}
+
+function findStudentIDBySocketID(socketID){
+    for(let i = 0; i < socketMap; i++){
+        if(socketMap[i].socketID == socketID){
+            return socketMap[i].studentID;
+        }
+    }
+    return null;
+}
+
+function removeSocketMap(socketID){
+    let index = findSocketIndexBySocketID(socketID);
+    if(index >= 0){
+        return (socketMap.splice(index, 1));
+    }else{
+        return false;
     }
 }
 
-function findStudent(studentID){
-    let index = -1;
-    for(let i = 0; i < students.length; i++){
-        if(students[i].id == studentID) {
-            index = i;
-        }
+function changeSocketID(studentID, socketID){
+    let index = findSocketIndexBySudentID(studentID);
+    if(index >= 0){
+        socketMap[index].socketID = socketID;
+        return true;
+    }else{
+        return false;
     }
-    return index;
 }
