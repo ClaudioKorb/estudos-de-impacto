@@ -1,0 +1,22 @@
+[
+    {
+        "number" : 1,
+        "answer" : "Claudio"
+    },
+    {
+        "number" : 2,
+        "answer" : "Monster"
+    },
+    {
+        "number":3,
+        "answer":"Chester"
+    },
+    {
+        "number":4,
+        "answer":"24"
+    },
+    {
+        "number":5,
+        "answer":"Futebol"
+    }
+]
