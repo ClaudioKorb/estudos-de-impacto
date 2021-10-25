@@ -37,7 +37,8 @@
         </div>
     <script>
         let socket;
-        socket = io.connect('http://localhost:3000');
+        //socket = io.connect('http://localhost:3000');
+        socket = io.connect(document.location.href);
         let submit = document.getElementById("submit");
         submit.addEventListener('click', function(){
             let studentName = document.getElementById('username').value;

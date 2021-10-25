@@ -27,7 +27,8 @@ let numberOfQuestions = 3;
 let currentQuestion = 0;
 
 function setup(){
-    socket = io.connect('http://localhost:3000');
+    //socket = io.connect('http://localhost:3000');
+    socket = io.connect(document.location.href);
     let canvas;
     socket.emit('animationPage');
     socket.on("canvasCreation", function(canvasData){

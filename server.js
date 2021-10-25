@@ -11,6 +11,9 @@ const questions = require('./questions.json');
 const answers = require('./answers.json');
 let students = [];
 let numberOfQuestions = 3;
+const PORT = process.env.PORT;
+
+console.log(process.env);
 
 let worldConfig = {
     gravity : 9.81,
@@ -19,7 +22,10 @@ let worldConfig = {
 let express = require('express');
 let app = express();
 
-let server = app.listen(3000);
+//let server = app.listen(3000);
+let server = app.listen(PORT, ()=>{
+    console.log('Server listening on port ' + PORT);
+})
 app.use(express.static('public'));
 
 console.log("Socket server running...");
