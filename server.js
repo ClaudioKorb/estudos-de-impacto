@@ -13,8 +13,6 @@ let students = [];
 let numberOfQuestions = 3;
 const PORT = process.env.PORT;
 
-console.log(process.env);
-
 let worldConfig = {
     gravity : 9.81,
     
@@ -39,6 +37,7 @@ io.sockets.on('connection', newConnection);
 function newConnection(socket){
     console.log("New connection: " + socket.id);
     socket.on('animationPage', function(){
+        console.log('asdpoaskdpasjdpoas');
         let canvasData = {
             width : canvasWidth,
             height : canvasHeight
@@ -58,7 +57,7 @@ function newConnection(socket){
         }
         let newStudent = new student(studentData, newQuestions);
         students.push(newStudent);
-    })
+    });
 
     socket.on('getQuestions', function(studentID){
         console.log(studentID);

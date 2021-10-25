@@ -25,21 +25,21 @@ let loaded = false;
 let myQuestions = [];
 let numberOfQuestions = 3;
 let currentQuestion = 0;
+let canvasWidth = 400;
+let canvasHeight = 660;
+
 
 function setup(){
     //socket = io.connect('http://localhost:3000');
     socket = io.connect(document.location.href);
     let canvas;
-    socket.emit('animationPage');
-    socket.on("canvasCreation", function(canvasData){
-        loaded = true;
-        canvas = createCanvas(canvasData.width,canvasData.height);
-        width = canvasData.width;
-        height = canvasData.height;
-        canvas.parent('sketch-holder');
-        frameRate(framerate);
-        bottomBarrier = new Barrier(0, height - 30, width, height-30);
-    })
+    loaded = true;
+    canvas = createCanvas(canvasWidth,canvasHeight);
+    width = canvasWidth;
+    height = canvasHeight;
+    canvas.parent('sketch-holder');
+    frameRate(framerate);
+    bottomBarrier = new Barrier(0, height - 30, width, height-30);
 
     myfallBody = new fallBody();
     scale = fallHeight / 600;
