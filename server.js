@@ -3,7 +3,7 @@ const questions = require('./questions.json');
 const answers = require('./answers.json');
 
 let students = new studentClass.studentList();
-let numberOfQuestions = 3;
+let numberOfQuestions = process.env.IMPACT_NUMBER_OF_QUESTIONS;
 let socketMap = [];
 
 const PORT = process.env.PORT;
@@ -12,9 +12,12 @@ let express = require('express');
 let app = express();
 
 let server = app.listen(PORT)
+console.log("Server listening on port " + PORT);
+
 app.use(express.static('public'));
 
 console.log("Socket server running...");
+//console.log("Number of questions: " + numberOfQuestions);
 
 let socket = require('socket.io');
 let io = socket(server);
@@ -23,87 +26,121 @@ let io = socket(server);
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket){
-    console.log("New connection: " + socket.id);
+    try{
+        console.log("New connection: " + socket.id);
+    }catch(e){
+        console.log("Não foi possivel estabelecer a conexão");
+        console.log(e);
+    }
     
     socket.on('newStudent', function(studentData){
         let newQuestions = [];
         let newQuestionsNumbers = [];
-        while(newQuestions.length < numberOfQuestions){
-            let candidateQuestion = getRandomInt(1, questions.length);
-            if(!newQuestionsNumbers.includes(candidateQuestion)){
-                newQuestions.push(questions[candidateQuestion-1]);
-                newQuestionsNumbers.push(questions[candidateQuestion-1].number)
+        try{
+            while(newQuestions.length < numberOfQuestions){
+                let candidateQuestion = getRandomInt(1, questions.length);
+                if(!newQuestionsNumbers.includes(candidateQuestion)){
+                    newQuestions.push(questions[candidateQuestion-1]);
+                    newQuestionsNumbers.push(questions[candidateQuestion-1].number)    
+                }
             }
-        }
-        let newStudent = new studentClass.student(studentData, newQuestions);
-        if(students.addStudent(newStudent)){
-            console.log('Estudante <' + newStudent.id+'> não existe');
-            console.log('Novo estudante adicionado: ' + newStudent.name);
-            console.log('Numero de estudantes ativo: ' + students.list.length);
-            let studentSocket = {
-                studentID : newStudent.id,
-                socketID : socket.id
+            let newStudent = new studentClass.student(studentData, newQuestions);
+            if(students.addStudent(newStudent)){
+                console.log('Estudante <' + newStudent.id+'> não existe');
+                console.log('Novo estudante adicionado: ' + newStudent.name);
+                console.log('Numero de estudantes ativo: ' + students.list.length);
+                let studentSocket = {
+                    studentID : newStudent.id,
+                    socketID : socket.id
+                }
+                socketMap.push(studentSocket);
+            }else{
+                console.log('Estudante já está cadastrado');
+                //changeSocketID(newStudent.id, socket.id);
             }
-            socketMap.push(studentSocket);
-        }else{
-            console.log('Estudante já está cadastrado');
-            //changeSocketID(newStudent.id, socket.id);
+            let questionData = null;
+            if(students.findStudentIndex(studentData.id) >= 0){
+                questionData = students.findStudent(studentData.id).questions;
+            }
+            socket.emit('yourQuestions', questionData);
+        }catch(e){
+            console.log("Falha ao gerar questões para o usuário " + studentData.id);
+            console.log(e);
         }
-        let questionData = null;
-        if(students.findStudentIndex(studentData.id) >= 0){
-            questionData = students.findStudent(studentData.id).questions;
-        }
-        socket.emit('yourQuestions', questionData);  
-    })
+    });
 
     socket.on('getQuestions', function(studentID){
-        console.log('Estudante ' + studentID + ' solicitou questões');
-        let questionData = null;
-        if(students.findStudentIndex(studentID) >= 0){
-            questionData = students.findStudent(studentID).questions;
+        if(studentID){
+            try{
+                console.log('Estudante ' + studentID + ' solicitou questões');
+                let questionData = null;
+                if(students.findStudentIndex(studentID) >= 0){
+                    questionData = students.findStudent(studentID).questions;
+                }
+                socket.emit('yourQuestions', questionData);          
+            }catch(e){
+                console.log("Falha ao enviar perguntas para o usuário " + studentID);
+                console.log(e);
+            }
         }
-        socket.emit('yourQuestions', questionData);  
-    })
+    });
 
     socket.on('currentQuestion', function(studentID){
-        let thisStudent = students.findStudent(studentID);
-        if(thisStudent.questions.currentQuestion == thisStudent.questions.questionData.length){
-            socket.emit('thisIsTheCurrentQuestion', 'end');
-        }else{
-            socket.emit('thisIsTheCurrentQuestion', thisStudent.questions.currentQuestion);
+        if(studentID){
+            try{
+                let thisStudent = students.findStudent(studentID);
+                console.log('questao atual: ' + thisStudent.questions.currentQuestion);
+                console.log('numero de questoes: ' + thisStudent.questions.questionData.length);
+                if(!thisStudent.nextQuestion()){
+                    console.log('mandando end');
+                    socket.emit('thisIsTheCurrentQuestion', 'end');
+                }else{
+                    console.log('mandando ' +thisStudent.questions.currentQuestion);
+                    socket.emit('thisIsTheCurrentQuestion', thisStudent.questions.currentQuestion);
+                }
+            }catch(e){
+                console.log("Erro ao enviar pergunta atual para o usuário " + studentID);
+                console.log(e);
+            }
         }
     })
 
     socket.on('answerQuestion', function(answerData){
         if(answerData){
-            let rightAnswer = false;
-            console.log(answerData.question);
-            for(let answer of answers){
-                if(answer.number == answerData.question){
-                    console.log(answer.number == answerData.question);
-                    //later change to multiple correct answers
-                    let studenAnswer = answerData.answer;
-                    let correctAnswer = answer.answer;
-                    if(studenAnswer.trim().toLowerCase() == correctAnswer.trim().toLowerCase()){
-                        rightAnswer = true;
+            try{
+                let rightAnswer = false;
+                console.log(answerData.question);
+                for(let answer of answers){
+                    if(answer.number == answerData.question){
+                        console.log(answer.number == answerData.question);
+                        //later change to multiple correct answers
+                        let studenAnswer = answerData.answer;
+                        let correctAnswer = answer.answer;
+                        if(studenAnswer.trim().toLowerCase() == correctAnswer.trim().toLowerCase()){
+                            rightAnswer = true;
+                        }
+                        break;
                     }
-                    break;
                 }
+                if(rightAnswer){
+                    studentIndex = students.findStudentIndex(answerData.studentID);
+                    students.list[studentIndex].markAsCorrect(answerData.question);
+    
+                }else{
+                    //TO DO reduzir peso da questão para tentativas subsequentes
+                }
+                let msgData = {
+                    question: answerData.question,
+                    correct : rightAnswer
+                }
+                socket.emit('checkAnswer', msgData);
+            }catch(e){
+                console.log("Erro ao verificar resposta do usuário " + answerData.studentID);
+                console.log(e);
             }
-            if(rightAnswer){
-                studentIndex = students.findStudentIndex(answerData.studentID);
-                students.list[studentIndex].markAsCorrect(answerData.question);
-
-            }else{
-                //TO DO reduzir peso da questão para tentativas subsequentes
-            }
-            let msgData = {
-                question: answerData.question,
-                correct : rightAnswer
-            }
-            socket.emit('checkAnswer', msgData);
+            
         }
-    })
+    });
 
     socket.on('disconnect', function(){
         console.log('disconnected');

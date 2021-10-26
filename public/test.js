@@ -80,7 +80,6 @@ function setup(){
 
     socket.on('checkAnswer', function(msgData){
         if(msgData.correct == true){
-            alert("Correto");
             myQuestions.correctQuestions[myQuestions.currentQuestion] = 1;
             myQuestions.questionsWeight[myQuestions.currentQuestion] = 1;
         }else{
@@ -88,14 +87,15 @@ function setup(){
             myQuestions.correctQuestions[myQuestions.currentQuestion] = 0;
             myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
         }
-        socket.emit('currentQuestion', studentID);
+        socket.emit('currentQuestion', myID);
     });
 
     socket.on('thisIsTheCurrentQuestion', function(questionIndex){
-        if(questionIndex = 'end'){
+        if(questionIndex == 'end'){
             alert('FIM');
         }else{
             myQuestions.currentQuestion = questionIndex;
+            changeQuestion();
         }
     });
 }
@@ -178,7 +178,7 @@ submitAnswer.addEventListener('mousedown', function(){
     let studentAnswer = document.forms['question-form'].answer.value;
     let myId = cookieParser(document.cookie)['studentID'];
     let answerData = {
-        question : myQuestions[currentQuestion].number,
+        question : myQuestions.questionData[myQuestions.currentQuestion].number,
         answer : studentAnswer,
         studentID : myId
     }
@@ -230,4 +230,9 @@ function cookieParser(cookieString){
         cookies[key] = value;
     }
     return cookies;
+}
+
+function changeQuestion(){
+    questionTitle.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].title;
+    questionBody.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].text;
 }

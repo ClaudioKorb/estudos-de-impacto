@@ -40,6 +40,15 @@ module.exports = {
             }
             return index;
         }
+
+        nextQuestion(){
+            if(this.questions.currentQuestion == this.questions.questionData.length -1){
+                return false;
+            }else{
+                this.questions.currentQuestion++;
+                return true;
+            }
+        }
     },
 
     studentList : class{
