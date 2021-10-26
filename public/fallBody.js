@@ -9,7 +9,7 @@ class fallBody{
         this.acc = 0;
         this.energy = 0;
         this.lastSpeed = 0;
-        this.tooltip = new tooltip(this.xpos, this.ypos, document.getElementById('show-velocity-check').checked, document.getElementById('show-energy-check').checked);
+        this.tooltip = new tooltip(this.xpos, this.ypos, true, true);
     };
 
     show(){
@@ -25,7 +25,7 @@ class fallBody{
     }
 
     fall(speed){
-        this.acc = gravity;
+        this.acc = worldData.gravity;
         if(speed){
             this.speed = speed;
             console.log("SPEED: " + this.speed);

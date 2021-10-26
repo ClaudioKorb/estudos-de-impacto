@@ -2,26 +2,70 @@
     {
         "number": 1,
         "title": "Pergunta Um",
-        "text": "Qual o meu nome?"
+        "text": "Qual o meu nome?",
+        "experimentData": {
+            "gravity" : 10,
+            "planet" : "earth",
+            "initialVelocity" : 0,
+            "initialVelocityUn" : "ms",
+            "bodyMass" : 80,
+            "bodyMassUn" : "kg"
+        }
     },
     {
         "number": 2,
         "title": "Pergunta Dois",
-        "text" : "Qual a minha bebida favorita?"
+        "text" : "Qual a minha bebida favorita?",
+        "experimentData": {
+            "gravity" : 10,
+            "planet" : "earth",
+            "initialVelocity" : 10,
+            "initialVelocityUn" : "ms",
+            "bodyMass" : 800,
+            "bodyMassUn" : "g"
+        }
+
     },
     {
         "number": 3,
         "title": "Pergunta Três",
-        "text": "Qual o nome do meu gato?"
+        "text": "Qual o nome do meu gato?",
+        "experimentData": {
+            "gravity" : 5,
+            "planet" : "mars",
+            "initialVelocity" : 0,
+            "initialVelocityUn" : "ms",
+            "bodyMass" : 80,
+            "bodyMassUn" : "kg"
+        }
+
     },
     {
         "number": 4,
         "title": "Pergunta Quatro",
-        "text": "Quantos anos eu tenho?"
+        "text": "Quantos anos eu tenho?",
+        "experimentData": {
+            "gravity" : 10,
+            "planet" : "jupiter",
+            "initialVelocity" : 100,
+            "initialVelocityUn" : "kh",
+            "bodyMass" : 80,
+            "bodyMassUn" : "kg"
+        }
+
     },
     {
         "number": 5,
         "title": "Pergunta Cinco",
-        "text": "Qual meu esporte favorito?"
+        "text": "Qual meu esporte favorito?",
+        "experimentData": {
+            "gravity" : 1,
+            "planet" : "moon",
+            "initialVelocity" : 0,
+            "initialVelocityUn" : "ms",
+            "bodyMass" : 80,
+            "bodyMassUn" : "kg"
+        }
+
     }
 ]
