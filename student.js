@@ -49,6 +49,15 @@ module.exports = {
                 return true;
             }
         }
+
+        calculateGrade(){
+            let sum = 0;
+            for(let i = 0; i < this.questions.correctQuestions.length; i++){
+                let partial = this.questions.correctQuestions[i]*this.questions.questionsWeight[i];
+                sum += partial;
+            }
+            return sum;
+        }
     },
 
     studentList : class{
@@ -91,9 +100,11 @@ module.exports = {
         }
 
         removeStudent(studentID){
-            let studentIndex = this.findStudentIndex(studentID)
+            let studentIndex = this.findStudentIndex(studentID);
+            console.log('removendo aluno ' + studentIndex);
             if(studentIndex >= 0){
-                this.list = this.list.splice(studentIndex,1);
+                console.log('removeu');
+                this.list.splice(studentIndex,1);
                 return true;
             }else{
                 return false;

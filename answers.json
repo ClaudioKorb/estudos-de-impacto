@@ -1,22 +1,22 @@
 [
     {
         "number" : 1,
-        "answer" : "Claudio"
+        "answer" : "6.33"
     },
     {
         "number" : 2,
-        "answer" : "Monster"
+        "answer" : "56"
     },
     {
         "number":3,
-        "answer":"Chester"
+        "answer":"200"
     },
     {
         "number":4,
-        "answer":"24"
+        "answer":"50"
     },
     {
         "number":5,
-        "answer":"Futebol"
+        "answer":"2.53"
     }
 ]

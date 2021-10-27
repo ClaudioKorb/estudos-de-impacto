@@ -46,23 +46,28 @@ function newConnection(socket){
             }
             let newStudent = new studentClass.student(studentData, newQuestions);
             if(students.addStudent(newStudent)){
+                console.log('-----------------');
                 console.log('Estudante <' + newStudent.id+'> não existe');
                 console.log('Novo estudante adicionado: ' + newStudent.name);
+                console.log('Socket do novo estudante: ' + socket.id);
                 console.log('Numero de estudantes ativo: ' + students.list.length);
+                console.log('----------------');
                 let studentSocket = {
                     studentID : newStudent.id,
-                    socketID : socket.id
+                    socket : socket
                 }
                 socketMap.push(studentSocket);
             }else{
                 console.log('Estudante já está cadastrado');
-                //changeSocketID(newStudent.id, socket.id);
+                console.log('Estudante ' + studentData.id + ' agora está conectado ao socket ' + socket.id);
+                changeSocketID(studentData.id, socket);
             }
             let questionData = null;
             if(students.findStudentIndex(studentData.id) >= 0){
                 questionData = students.findStudent(studentData.id).questions;
             }
             socket.emit('yourQuestions', questionData);
+            console.log('Questões enviadas para o usuário ' + studentData.id);
         }catch(e){
             console.log("Falha ao gerar questões para o usuário " + studentData.id);
             console.log(e);
@@ -142,9 +147,33 @@ function newConnection(socket){
         }
     });
 
+    socket.on('endTest', function(studentID){
+        console.log('Usuario ' + studentID + ' solicitou sua nota');
+        let thisStudent = students.findStudent(studentID);
+        if(thisStudent){
+            let grade = thisStudent.calculateGrade();
+            console.log('Questões certas: ' +thisStudent.questions.correctQuestions);
+            console.log('Peso das questões: '+thisStudent.questions.questionsWeight);
+            console.log('Nota do usuário: ' + grade);
+            socket.emit('yourGrade', grade);
+        }else{
+            socket.emit('yourGrade', 'error');
+        }
+    });
+
+    socket.on('removeMyConnection', function(studentID){
+        console.log('Removendo conexão do aluno ' + studentID);
+        let removeSocket = findSocketIDBySudentID(studentID);
+        console.log('Socket ' + removeSocket + ' removido');
+        removeSocketMap(removeSocket);
+        students.removeStudent(studentID);
+        console.log('Remoção concluída, número de sockets ativos: ' +socketMap.length);
+        console.log('Número de estudantes conectados: ' +students.list.length);
+    });
+
     socket.on('disconnect', function(){
-        console.log('disconnected');
-    })
+        console.log('Socket ' + socket.id + ' disconnected');
+    });
 }
 
 function getRandomInt(min, max) {
@@ -160,7 +189,7 @@ if (!String.prototype.trim) {
 }
 
 function findSocketIndexBySudentID(studentID){
-    for(let i = 0; i < socketMap; i++){
+    for(let i = 0; i < socketMap.length; i++){
         if(socketMap[i].studentID == studentID){
             return i;
         }
@@ -169,26 +198,26 @@ function findSocketIndexBySudentID(studentID){
 }
 
 function findSocketIDBySudentID(studentID){
-    for(let i = 0; i < socketMap; i++){
+    for(let i = 0; i < socketMap.length; i++){
         if(socketMap[i].studentID == studentID){
-            return socketMap[i].socketID;
+            return socketMap[i].socket.id;
         }
     }
     return null;
 }
 
 function findSocketIndexBySocketID(socketID){
-    for(let i = 0; i < socketMap; i++){
-        if(socketMap[i].socketID == socketID){
+    for(let i = 0; i < socketMap.length; i++){
+        if(socketMap[i].socket.id == socket){
             return i;
         }
     }
     return null;
 }
 
-function findStudentIDBySocketID(socketID){
-    for(let i = 0; i < socketMap; i++){
-        if(socketMap[i].socketID == socketID){
+function findStudentIDBySocketID(socket){
+    for(let i = 0; i < socketMap.length; i++){
+        if(socketMap[i].socket.id == socket.id){
             return socketMap[i].studentID;
         }
     }
@@ -204,12 +233,35 @@ function removeSocketMap(socketID){
     }
 }
 
-function changeSocketID(studentID, socketID){
+function changeSocketID(studentID, socket){
     let index = findSocketIndexBySudentID(studentID);
     if(index >= 0){
-        socketMap[index].socketID = socketID;
+        console.log('Mudando relação de socket');
+        console.log(socketMap[index].id);
+        console.log('---->')    
+        socketMap[index].socket = socket;
+        console.log(socketMap[index].id);    
         return true;
     }else{
         return false;
     }
 }
+
+setInterval(function(){
+    console.log('----------------------------------------');
+    console.log('Servidor efetuando limpeza de sockets inativos');
+    for(let i = 0; i < socketMap.length; i++){
+        if(socketMap[i].socket.connected){
+            console.log('Socket ' + socketMap[i].socket.id + ' ainda ativo');
+        }else{
+            console.log('Socket ' + socketMap[i].socket.id + ' inativo, deletando');
+            let deleteStudent = findStudentIDBySocketID(socketMap[i].socket);
+            students.removeStudent(deleteStudent);
+            removeSocketMap(socketMap[i].socket.id);
+            console.log('Relação de socket x Estudante removida');
+        }
+    }
+    console.log('Limpeza concluída, número de sockets ativos: ' +socketMap.length);
+    console.log('Número de estudantes conectados: ' +students.list.length);
+    console.log(students.list);
+}, 30000)

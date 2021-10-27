@@ -28,6 +28,7 @@ let startTest = document.getElementById('startButton');
 let cardDisplay = document.getElementById('card-div');
 let drawDisplay = document.getElementById('sketch-div');
 let nextButtonDisplay = document.getElementById('next-button-div');
+let exitButton = document.getElementById('logout-button');
 //Boolean control variables
 let simulating = false;
 let fim = false;
@@ -36,6 +37,7 @@ let myQuestions;
 let currentQuestion = 0;
 let myID = '';
 let cookies;
+let gotGrade = false;
 //
 function setup(){
     //socket = io.connect('http://localhost:3000');
@@ -46,79 +48,97 @@ function setup(){
         window.location.replace("/index.html");
     }
     //-------------------------------------------------------------
+    //connecting socket to server
+    myID = cookies['studentID'];
+    socket = io.connect(document.location.origin);
+    //verifying if client has already finished the test
     if(document.cookie.includes("fim=sim")){
         showEndOfTest();
-    }else{
-        //connecting socket to server
-        socket = io.connect(document.location.origin);
-        //initializing canvas for drawing the simulation
-        let canvas;
-        canvas = createCanvas(canvasWidth,canvasHeight);
-        width = canvasWidth;
-        height = canvasHeight;
-        canvas.parent('sketch-holder');
-        bg = loadImage('assets\\img\\earth.png');
-        frameRate(framerate);
-        //-----------------------------------------------
-        //Defining variables for the texts shown on the sketch screen
-        textSize(18);
-        textFont(timerFont);
-        //------------------------------------------------
-        //Creating instances for bottom barrier and fall body
-        bottomBarrier = new Barrier(0, height - 30, width, height-30);
-        myfallBody = new fallBody();
-        //-----------------------------------------------
-        //Defining the scale, used in calculations. 
-        //The cauculation of the velocity of the body, depends on it's position, which is measured in
-        // meters. The rendering of the animation, on the other hand, is measured in pixels. Therefore, we
-        // need to define a scale (m/px) to use in defining the position of the body on the screen.
-        scale = worldData.fallHeight / 600;
-        //------------------------------------------------
-        myID = cookies['studentID'];
-        let studentData = {                 
-            name : cookies['nome'],         
-            id : myID                       
+        if(!gotGrade){
+            console.log('PEDI!!');
+            socket.emit('endTest', myID);
         }
-        socket.emit("newStudent", studentData);
-        // When the client gets a message called 'yourQuestions', it means that the server is sending the
-        // state of the questions of the client. It might be the first time the client gets it's questions or not
-        socket.on('yourQuestions', function(data){
-            gotQuestions = true;
-            if(data){
-                myQuestions = data;
-                changeQuestion();
-            }else{     
-                alert("Falha no sistema. Favor atualizar a página!");
-            }
-        });
-    
-        socket.on('checkAnswer', function(msgData){
-            changeWorldParameters(myQuestions.questionData[myQuestions.currentQuestion].experimentData);
-            showSketch();
-            createFallBody();
-            startFall();
-            if(msgData.correct == true){
-                simulating = true;
-                alert("CORRETO!");
-                myQuestions.correctQuestions[myQuestions.currentQuestion] = 1;
-                myQuestions.questionsWeight[myQuestions.currentQuestion] = 1;
-            }else{
-                alert("ERRADO!");
-                myQuestions.correctQuestions[myQuestions.currentQuestion] = 0;
-                myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
-            }
-            socket.emit('currentQuestion', myID);
-        });
-        
-        socket.on('thisIsTheCurrentQuestion', function(questionIndex){
-            if(questionIndex == 'end'){
-                fim = true;
-            }else{
-                myQuestions.currentQuestion = questionIndex;
-                changeQuestion();
-            }
-        });
     }
+    //initializing canvas for drawing the simulation
+    let canvas;
+    canvas = createCanvas(canvasWidth,canvasHeight);
+    width = canvasWidth;
+    height = canvasHeight;
+    canvas.parent('sketch-holder');
+    bg = loadImage('assets\\img\\earth.png');
+    frameRate(framerate);
+    //-----------------------------------------------
+    //Defining variables for the texts shown on the sketch screen
+    textSize(18);
+    textFont(timerFont);
+    //------------------------------------------------
+    //Creating instances for bottom barrier and fall body
+    bottomBarrier = new Barrier(0, height - 30, width, height-30);
+    myfallBody = new fallBody();
+    //-----------------------------------------------
+    //Defining the scale, used in calculations. 
+    //The cauculation of the velocity of the body, depends on it's position, which is measured in
+    // meters. The rendering of the animation, on the other hand, is measured in pixels. Therefore, we
+    // need to define a scale (m/px) to use in defining the position of the body on the screen.
+    scale = worldData.fallHeight / 600;
+    //------------------------------------------------
+    let studentData = {                 
+        name : cookies['nome'],         
+        id : myID                       
+    }
+    socket.emit("newStudent", studentData);
+    // When the client gets a message called 'yourQuestions', it means that the server is sending the
+    // state of the questions of the client. It might be the first time the client gets it's questions or not
+    socket.on('yourQuestions', function(data){
+        gotQuestions = true;
+        if(data){
+            myQuestions = data;
+            changeQuestion();
+        }else{     
+            alert("Falha no sistema. Favor atualizar a página!");
+        }
+    });
+
+    socket.on('checkAnswer', function(msgData){
+        changeWorldParameters(myQuestions.questionData[myQuestions.currentQuestion].experimentData);
+        showSketch();
+        createFallBody();
+        startFall();
+        if(msgData.correct == true){
+            simulating = true;
+            alert("CORRETO!");
+            myQuestions.correctQuestions[myQuestions.currentQuestion] = 1;
+            myQuestions.questionsWeight[myQuestions.currentQuestion] = 1;
+        }else{
+            simulating = true;
+            alert("ERRADO!");
+            myQuestions.correctQuestions[myQuestions.currentQuestion] = 0;
+            myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
+        }
+        socket.emit('currentQuestion', myID);
+    });
+    
+    socket.on('thisIsTheCurrentQuestion', function(questionIndex){
+        if(questionIndex == 'end'){
+            fim = true;
+            socket.emit('endTest', myID);
+        }else{
+            myQuestions.currentQuestion = questionIndex;
+            changeQuestion();
+        }
+    });
+
+    socket.on('yourGrade', function(grade){
+        if(grade != 'error'){
+            document.getElementById('customizable-text').innerHTML = "Nota final: " + grade;
+            gotGrade = true;    
+        }else{
+            alert('Falha no sistema');
+            socket.emit('removeMyConnection', myID);
+            deleteAllCookies();
+            window.location.replace("/index.html");
+        }
+    });
 }
 
 function preload(){
@@ -175,6 +195,12 @@ nextButtonDisplay.addEventListener('click', function(){
         showQuiz();
         myfallBody = new fallBody();    
     }
+});
+
+exitButton.addEventListener('click', function(){
+    deleteAllCookies();
+    socket.emit('removeMyConnection', myID);
+    window.location.replace("/index.html");
 })
 
 function cookieParser(cookieString){
@@ -263,7 +289,10 @@ function showEndOfTest(){
     cardDisplay.classList.add('d-none');
     drawDisplay.classList.add('d-none');
     nextButtonDisplay.classList.add('d-none');
+    document.getElementById('end-text-msg').innerHTML = document.getElementById('end-text-msg').innerHTML + ", " + cookies['nome'];
     document.getElementById('end-test-text').classList.remove('d-none');
+    document.getElementById('customizable-text-div').classList.remove('d-none');
+    exitButton.classList.remove('d-none');
 }
 
 function deleteAllCookies() {
