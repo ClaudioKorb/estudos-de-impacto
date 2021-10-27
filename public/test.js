@@ -11,6 +11,8 @@ let canvasWidth = 400;
 let canvasHeight = 660;
 let bg;
 let strokeColour = 'white';
+let wait = 0;
+
 //World configuration
 let worldData = {
     gravity : 10,
@@ -104,7 +106,6 @@ function setup(){
         changeWorldParameters(myQuestions.questionData[myQuestions.currentQuestion].experimentData);
         createFallBody();
         showSketch();
-        startFall();
         if(msgData.correct == true){
             simulating = true;
             alert("CORRETO!");
@@ -117,6 +118,7 @@ function setup(){
             myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
         }
         socket.emit('currentQuestion', myID);
+        startFall();
     });
     
     socket.on('thisIsTheCurrentQuestion', function(questionIndex){
@@ -147,13 +149,19 @@ function preload(){
 }
 
 function draw(){
+    background(bg);
+    myfallBody.show();
     if(simulating){
-        background(bg);
-        myfallBody.update();
-        myfallBody.show();
-        bottomBarrier.show();
-        fill('#DFDCE3');
-        text(paddy(myTimer.min, 2)+":"+paddy(myTimer.sec, 2)+":"+paddy(myTimer.mili, 3), 320, 20);
+        if(wait < 120){
+            wait++;
+        }else{
+            //background(bg);
+            myfallBody.update();
+            //myfallBody.show();
+            bottomBarrier.show();
+            fill('#DFDCE3');
+            text(paddy(myTimer.min, 2)+":"+paddy(myTimer.sec, 2)+":"+paddy(myTimer.mili, 3), 320, 20);
+        }
     }
 }
 
@@ -177,6 +185,8 @@ class ruler{
 }
 answerRadios
 submitAnswer.addEventListener('mousedown', function(){
+    simulating = false;
+    wait = 0;
     let index = 0;
     let answered = false;
     let studentAnswer;
