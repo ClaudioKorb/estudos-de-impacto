@@ -10,8 +10,7 @@
             "initialVelocityUn" : "ms",
             "bodyMass" : 80,
             "bodyMassUn" : "kg"
-        },
-        "options":["6.33 m/s", "60.3 m/s", "603 m/s", "72 m/s", "2.1 m/s"]
+        }
     },
     {
         "number": 2,
@@ -24,8 +23,8 @@
             "initialVelocityUn" : "ms",
             "bodyMass" : 800,
             "bodyMassUn" : "g"
-        },
-        "options":["6 J", "56 J", "60 J", "21 J", "560 J"]
+        }
+
     },
     {
         "number": 3,
@@ -38,14 +37,13 @@
             "initialVelocityUn" : "ms",
             "bodyMass" : 25,
             "bodyMassUn" : "kg"
-        },
-        "options":["600 J", "512 J", "200 J", "20 J", "160 J"]
+        }
 
     },
     {
         "number": 4,
         "title": "Pergunta Quatro",
-        "text": "Um corpo foi solto do repouso de uma altura de 2m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 2 metros, sua energia cinética era de 2500J. Qual a massa do corpo em kilogramas?",
+        "text": "Um corpo foi solto do repouso de uma altura de 2m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 2 metros, sua energia cinética era de 2500J. Qual a massa do corpo?",
         "experimentData": {
             "gravity" : 25,
             "planet" : "jupiter",
@@ -53,8 +51,8 @@
             "initialVelocityUn" : "ms",
             "bodyMass" : 50,
             "bodyMassUn" : "kg"
-        },
-        "options":["50 kg", "21 kg", "200 kg", "500 kg", "5000 kg"]
+        }
+
     },
     {
         "number": 5,
@@ -67,7 +65,7 @@
             "initialVelocityUn" : "ms",
             "bodyMass" : 2,
             "bodyMassUn" : "kg"
-        },
-        "options":["2.53 m/s", "25.3 m/s", "9.1 m/s", "72 m/s", "16 m/s"]
+        }
+
     }
 ]

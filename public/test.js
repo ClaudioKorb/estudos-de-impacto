@@ -10,6 +10,7 @@ let scale;
 let canvasWidth = 400;
 let canvasHeight = 660;
 let bg;
+let strokeColour = 'white';
 //World configuration
 let worldData = {
     gravity : 10,
@@ -29,6 +30,7 @@ let cardDisplay = document.getElementById('card-div');
 let drawDisplay = document.getElementById('sketch-div');
 let nextButtonDisplay = document.getElementById('next-button-div');
 let exitButton = document.getElementById('logout-button');
+let answerRadios = [document.getElementById('radio-answer-1'),document.getElementById('radio-answer-2'),document.getElementById('radio-answer-3'),document.getElementById('radio-answer-4'),document.getElementById('radio-answer-5')]
 //Boolean control variables
 let simulating = false;
 let fim = false;
@@ -55,7 +57,6 @@ function setup(){
     if(document.cookie.includes("fim=sim")){
         showEndOfTest();
         if(!gotGrade){
-            console.log('PEDI!!');
             socket.emit('endTest', myID);
         }
     }
@@ -174,8 +175,34 @@ class ruler{
         
     }
 }
-
+answerRadios
 submitAnswer.addEventListener('mousedown', function(){
+    let index = 0;
+    let answered = false;
+    let studentAnswer;
+    for(const radio of answerRadios){
+        if(radio.checked){
+            answered = true;
+            break;
+        }
+        index++;
+    }
+    if(answered){
+        studentAnswer = document.getElementById('label'+index).innerHTML;
+        let myId = cookieParser(document.cookie)['studentID'];
+        let answerData = {
+            question : myQuestions.questionData[myQuestions.currentQuestion].number,
+            answer : studentAnswer,
+            studentID : myId
+        }
+        socket.emit('answerQuestion', answerData);
+        
+    }else{
+        alert('Escolha uma opção!');
+    }
+});
+
+/*submitAnswer.addEventListener('mousedown', function(){
     let studentAnswer = document.getElementById('answer').value;
     let myId = cookieParser(document.cookie)['studentID'];
     let answerData = {
@@ -184,7 +211,7 @@ submitAnswer.addEventListener('mousedown', function(){
         studentID : myId
     }
     socket.emit('answerQuestion', answerData);
-});
+});*/
 
 nextButtonDisplay.addEventListener('click', function(){
     if(fim){
@@ -221,6 +248,11 @@ function cookieParser(cookieString){
 }
 
 function changeQuestion(){
+    let options = [...myQuestions.questionData[myQuestions.currentQuestion].options];
+    options = shuffleArray(options);
+    for(let i = 0; i < options.length; i++){
+        document.getElementById('label'+i).innerHTML = options[i];
+    }
     questionTitle.innerHTML = "Questão " + myQuestions.currentQuestion+1;
     questionBody.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].text;
 }
@@ -234,6 +266,11 @@ function changeWorldParameters(experimentData){
     worldData.bodyMassUn = experimentData.bodyMassUn;
     worldData.fallHeight = experimentData.fallHeight;
     bg = loadImage('assets\\img\\' + worldData.planet + ".png");
+    if(worldData.planet == 'earth' || worldData.planet == 'jupiter'){
+        strokeColour = 'black';
+    }else{
+        strokeColour = 'white';
+    }
 
 }
 
@@ -304,3 +341,28 @@ function deleteAllCookies() {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
 }
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffleArray(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+  

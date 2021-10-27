@@ -1,22 +1,22 @@
 [
     {
         "number" : 1,
-        "answer" : "6.33 m/s"
+        "answer" : "6.33"
     },
     {
         "number" : 2,
-        "answer" : "56 J"
+        "answer" : "56"
     },
     {
         "number":3,
-        "answer":"200 J"
+        "answer":"200"
     },
     {
         "number":4,
-        "answer":"50 kg"
+        "answer":"50"
     },
     {
         "number":5,
-        "answer":"2.53 m/s"
+        "answer":"2.53"
     }
 ]

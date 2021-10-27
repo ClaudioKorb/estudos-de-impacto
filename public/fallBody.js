@@ -100,14 +100,14 @@ class tooltip{
 
     showVelocity(speed){
         if(this.showVel){
-            stroke(255);
+            stroke(strokeColour);
             let offset = (roundIt(speed,2)).toString().length - 3;
             if(offset < 0) offset = 0;
             line(this.xpos, this.ypos, this.xpos+110+(offset*15), this.ypos);
             line(this.xpos+110+(offset*15), this.ypos,this.xpos+110+(offset*15)+10, this.ypos-7)
             textSize(13);
             noFill();
-            stroke(255);
+            stroke(strokeColour);
             textFont(timerFont);
             text("V = "+roundIt(speed,2)+" m/s", this.xpos+50,this.ypos - 5);
         }
@@ -115,14 +115,14 @@ class tooltip{
 
     showEnergy(energy){
         if(this.showEn){
-            stroke(255);
+            stroke(strokeColour);
             let offset = (roundIt(energy,2)).toString().length - 3;
             if(offset < 0) offset = 0;
             line(this.xpos, this.ypos, this.xpos-15, this.ypos-20);
             line(this.xpos-15, this.ypos-20, this.xpos-110, this.ypos-20);
             textSize(13);
             noFill();
-            stroke(255);
+            stroke(strokeColour);
             textFont(timerFont);
             text("E = "+roundIt(energy,2)+" J", this.xpos-110,this.ypos - 25);
 
