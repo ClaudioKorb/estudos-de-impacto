@@ -101,8 +101,8 @@ function setup(){
 
     socket.on('checkAnswer', function(msgData){
         changeWorldParameters(myQuestions.questionData[myQuestions.currentQuestion].experimentData);
-        showSketch();
         createFallBody();
+        showSketch();
         startFall();
         if(msgData.correct == true){
             simulating = true;
@@ -221,7 +221,7 @@ function cookieParser(cookieString){
 }
 
 function changeQuestion(){
-    questionTitle.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].title;
+    questionTitle.innerHTML = "Questão " + myQuestions.currentQuestion+1;
     questionBody.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].text;
 }
 

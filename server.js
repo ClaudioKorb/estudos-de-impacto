@@ -264,4 +264,4 @@ setInterval(function(){
     console.log('Limpeza concluída, número de sockets ativos: ' +socketMap.length);
     console.log('Número de estudantes conectados: ' +students.list.length);
     console.log(students.list);
-}, 30000)
+}, 3600000);
