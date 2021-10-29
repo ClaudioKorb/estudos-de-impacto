@@ -8,7 +8,10 @@ let timerFont;
 let framerate = 120;
 let scale;
 let canvasWidth = 400;
-let canvasHeight = 660;
+let fallHeightPx = 600;
+let startingPointPx = 30;
+let barrierHeightPx = 30;
+let canvasHeight = fallHeightPx + startingPointPx + barrierHeightPx;
 let bg;
 let strokeColour = 'white';
 let wait = 0;
@@ -31,6 +34,7 @@ let startTest = document.getElementById('startButton');
 let cardDisplay = document.getElementById('card-div');
 let drawDisplay = document.getElementById('sketch-div');
 let nextButtonDisplay = document.getElementById('next-button-div');
+let replayButton = document.getElementById('replay-div');
 let exitButton = document.getElementById('logout-button');
 let answerRadios = [document.getElementById('radio-answer-1'),document.getElementById('radio-answer-2'),document.getElementById('radio-answer-3'),document.getElementById('radio-answer-4'),document.getElementById('radio-answer-5')]
 //Boolean control variables
@@ -83,7 +87,7 @@ function setup(){
     //The cauculation of the velocity of the body, depends on it's position, which is measured in
     // meters. The rendering of the animation, on the other hand, is measured in pixels. Therefore, we
     // need to define a scale (m/px) to use in defining the position of the body on the screen.
-    scale = worldData.fallHeight / 600;
+    scale = worldData.fallHeight / fallHeightPx;
     //------------------------------------------------
     let studentData = {                 
         name : cookies['nome'],         
@@ -158,7 +162,7 @@ function draw(){
             //background(bg);
             myfallBody.update();
             //myfallBody.show();
-            bottomBarrier.show();
+            //bottomBarrier.show();
             fill('#DFDCE3');
             text(paddy(myTimer.min, 2)+":"+paddy(myTimer.sec, 2)+":"+paddy(myTimer.mili, 3), 320, 20);
         }
@@ -183,8 +187,14 @@ class ruler{
         
     }
 }
-answerRadios
-submitAnswer.addEventListener('mousedown', function(){
+
+replayButton.addEventListener('click', function(){
+    createFallBody();
+    startFall();
+    wait = 0;
+})
+
+submitAnswer.addEventListener('click', function(){
     simulating = false;
     wait = 0;
     let index = 0;
@@ -260,10 +270,13 @@ function cookieParser(cookieString){
 function changeQuestion(){
     let options = [...myQuestions.questionData[myQuestions.currentQuestion].options];
     options = shuffleArray(options);
+    for(const radio of answerRadios){
+        radio.checked = false;
+    }
     for(let i = 0; i < options.length; i++){
         document.getElementById('label'+i).innerHTML = options[i];
     }
-    questionTitle.innerHTML = "Questão " + myQuestions.currentQuestion+1;
+    questionTitle.innerHTML = "Questão " + (Number(myQuestions.currentQuestion)+Number(1));
     questionBody.innerHTML = myQuestions.questionData[myQuestions.currentQuestion].text;
 }
 
@@ -275,6 +288,7 @@ function changeWorldParameters(experimentData){
     worldData.bodyMass = experimentData.bodyMass;
     worldData.bodyMassUn = experimentData.bodyMassUn;
     worldData.fallHeight = experimentData.fallHeight;
+    scale = worldData.fallHeight / fallHeightPx;
     bg = loadImage('assets\\img\\' + worldData.planet + ".png");
     if(worldData.planet == 'earth' || worldData.planet == 'jupiter'){
         strokeColour = 'black';
@@ -324,18 +338,22 @@ function showQuiz(){
     cardDisplay.classList.remove('d-none');
     drawDisplay.classList.add('d-none');
     nextButtonDisplay.classList.add('d-none');
+    replayButton.classList.add('d-none');
 }
 
 function showSketch(){
     cardDisplay.classList.add('d-none');
     drawDisplay.classList.remove('d-none');
     nextButtonDisplay.classList.remove('d-none');
+    replayButton.classList.remove('d-none');
+
 }
 
 function showEndOfTest(){
     cardDisplay.classList.add('d-none');
     drawDisplay.classList.add('d-none');
     nextButtonDisplay.classList.add('d-none');
+    replayButton.classList.add('d-none');
     document.getElementById('end-text-msg').innerHTML = document.getElementById('end-text-msg').innerHTML + ", " + cookies['nome'];
     document.getElementById('end-test-text').classList.remove('d-none');
     document.getElementById('customizable-text-div').classList.remove('d-none');

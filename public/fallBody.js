@@ -1,10 +1,10 @@
 class fallBody{
     constructor(mass, xpos, ypos, diameter, myColor){
+        diameter ? this.diameter = diameter : this.diameter = 40;
         mass ? this.mass = mass : this.mass = 1;
         xpos ? this.xpos = xpos : this.xpos = width/2;
-        ypos ? this.ypos = ypos : this.ypos = 20 ;
-        diameter ? this.diameter = diameter : this.diameter = 20;
-        myColor ? this.color = myColor : this.color = color('#fc4a1a');
+        ypos ? this.ypos = ypos : this.ypos = startingPointPx - (this.diameter/2);
+        myColor ? this.color = myColor : this.color = color(51); //'#fc4a1a'
         this.speed = 0;
         this.acc = 0;
         this.energy = 0;
@@ -22,6 +22,11 @@ class fallBody{
         noStroke();
         fill(this.color);
         ellipse(this.xpos, this.ypos, this.diameter, this.diameter);
+        noFill();
+        stroke('white');
+        textFont(timerFont);
+        textAlign(CENTER);
+        text(this.mass + " kg", this.xpos,this.ypos+(textSize()/2 - 2));
     }
 
     fall(speed){
@@ -109,7 +114,7 @@ class tooltip{
             noFill();
             stroke(strokeColour);
             textFont(timerFont);
-            text("V = "+roundIt(speed,2)+" m/s", this.xpos+50,this.ypos - 5);
+            text("V = "+roundIt(speed,2)+" m/s", this.xpos+60,this.ypos - 5);
         }
     }
 
@@ -124,7 +129,7 @@ class tooltip{
             noFill();
             stroke(strokeColour);
             textFont(timerFont);
-            text("E = "+roundIt(energy,2)+" J", this.xpos-110,this.ypos - 25);
+            text("E = "+roundIt(energy,2)+" J", this.xpos-80,this.ypos - 25);
 
         }
     }

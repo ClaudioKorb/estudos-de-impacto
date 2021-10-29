@@ -18,5 +18,25 @@
     {
         "number":5,
         "answer":"2.53 m/s"
+    },
+    {
+        "number":6,
+        "answer":"6.45 m/s"
+    },
+    {
+        "number":7,
+        "answer":"15 kg"
+    },
+    {
+        "number":8,
+        "answer":"20 m/s"
+    },
+    {
+        "number":9,
+        "answer":"2250 J"
+    },
+    {
+        "number":10,
+        "answer":"24 m/s"
     }
 ]

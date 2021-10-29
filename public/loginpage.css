@@ -4,8 +4,9 @@ body {
   background-color: #2e2f30;
   height: 100vh;
 }
+
 #login .container #login-row #login-column #login-box {
-  margin-top: 120px;
+  margin-top: 30vh;
   max-width: 600px;
   height: 250px;
   border: 1px solid #9C9C9C;

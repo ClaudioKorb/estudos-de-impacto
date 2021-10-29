@@ -19,7 +19,7 @@
 <style type="text/css">
     body{ background: #ffe8e8 !important;}
 </style>
-<body>
+<body style="height: 100vh;">
   <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-sm-12">
@@ -29,10 +29,11 @@
             </div>
         </div>
         <div class="row">
+            <div class
             <div class="col-lg-12 col-sm-12" id="card-div">
                 <div class="row">
                     <div class="container mt-5" style="position: relative;">
-                        <div class="card" style="max-width: 100%; position: absolute; left: 20%; right: 20%;">
+                        <div class="card border border-dark" style="max-width: 100%; position: absolute; left: 20%; right: 20%;">
                             <img class="card-img-top m-2" src="..\assets\img\question_mark.png" alt="Card image cap" style="width:10rem; align-self: center;">
                             <div class="card-header text-center">
                                 Pergunta
@@ -68,7 +69,7 @@
                                         </div> -->
                                     </div>
                                     <div class="row mt-1">
-                                        <button class="btn btn-primary " id="submit-answer">Responder</button>    
+                                        <button class="btn btn-primary" id="submit-answer">Responder</button>
                                     </div>
                                 </div>
                             </div>
@@ -79,6 +80,11 @@
             <div class="col-lg-12 col-sm-12 mb-3 d-none" id="sketch-div">
                 <div class="d-flex justify-content-center" id="sketch-holder"></div>
             </div> 
+            <div class="col-lg-12 col-sm-12 mt-1 d-none" id="replay-div">
+                <div class="d-flex justify-content-center" id="button-holder">
+                    <button class="btn btn-secondary btn-md">Visualizar novamente</button>
+                </div>
+            </div>
             <div class="col-lg-12 col-sm-12 mt-1 d-none" id="next-button-div">
                 <div class="d-flex justify-content-center" id="button-holder">
                     <button class="btn btn-info btn-md">Próxima Pergunta</button>

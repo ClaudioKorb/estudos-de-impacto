@@ -117,7 +117,7 @@ speedUnityKH.addEventListener('click', function(){
     speedUnity = 1;
 })
 
-fallButton.addEventListener('mousedown', function(){
+fallButton.addEventListener('click', function(){
     fallHeight = document.getElementById('fall-height-range').value;
     console.log("fallHeight = " + fallHeight);
     scale = fallHeight / 600;
@@ -138,7 +138,7 @@ fallButton.addEventListener('mousedown', function(){
     }
 })
 
-resetButton.addEventListener('mousedown', function(){
+resetButton.addEventListener('click', function(){
     fallHeight = document.getElementById('fall-height-range').value;
     scale = fallHeight / 600;
     myTimer.stop();
