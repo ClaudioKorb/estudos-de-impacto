@@ -37,6 +37,7 @@ let nextButtonDisplay = document.getElementById('next-button-div');
 let replayButton = document.getElementById('replay-div');
 let exitButton = document.getElementById('logout-button');
 let answerRadios = [document.getElementById('radio-answer-1'),document.getElementById('radio-answer-2'),document.getElementById('radio-answer-3'),document.getElementById('radio-answer-4'),document.getElementById('radio-answer-5')]
+let numberRootButton = document.getElementById('submit-number');
 //Boolean control variables
 let simulating = false;
 let fim = false;
@@ -248,7 +249,13 @@ exitButton.addEventListener('click', function(){
     deleteAllCookies();
     socket.emit('removeMyConnection', myID);
     window.location.replace("/index.html");
-})
+});
+
+numberRootButton.addEventListener('click', function(){
+    let number = Number(document.getElementById('number').value);
+    let root = roundIt(Math.sqrt(number),2);
+    document.getElementById('resultado').innerHTML = "Resultado: " + root;
+});
 
 function cookieParser(cookieString){
     if(!cookieString){
@@ -394,3 +401,7 @@ function shuffleArray(array) {
     return array;
   }
   
+  function roundIt(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
