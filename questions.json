@@ -1,162 +1,152 @@
 [
-    {
-        "number": 1,
-        "title": "Pergunta Um",
-        "text": "Qual a velocidade final de um corpo de 80kg ao cair (do repouso) de uma altura de 2m na superfície terrestre? Considere g = 10m/s²?",
-        "experimentData": {
-            "gravity" : 10,
-            "planet" : "earth",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 80,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 2
-        },
-        "options":["6.33 m/s", "60.3 m/s", "603 m/s", "72 m/s", "2.1 m/s"]
+  {
+    "number": 1,
+    "title": "Pergunta Um",
+    "text": "Qual a velocidade final de um corpo de 80kg ao cair (do repouso) de uma altura de 2m na superfície terrestre? Considere g = 10m/s²?",
+    "experimentData": {
+      "gravity": 10,
+      "planet": "earth",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 80,
+      "bodyMassUn": "kg",
+      "fallHeight": 2
     },
-    {
-        "number": 2,
-        "title": "Pergunta Dois",
-        "text" : "Um corpo de 800g foi arremessado com velocidade inicial de 10m/s em direção ao solo, de uma altura de 2m na superfície terrestre (g=10m/s²). Qual sua energia cinética ao colidir com o solo?",
-        "experimentData": {
-            "gravity" : 10,
-            "planet" : "earth",
-            "initialVelocity" : 10,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 800,
-            "bodyMassUn" : "g",
-            "fallHeight" : 2
-
-        },
-        "options":["6 J", "56 J", "60 J", "21 J", "560 J"]
+    "options": ["6.33 m/s", "60.3 m/s", "603 m/s", "72 m/s", "2.1 m/s"]
+  },
+  {
+    "number": 2,
+    "title": "Pergunta Dois",
+    "text": "Um corpo de 800g foi arremessado com velocidade inicial de 10m/s em direção ao solo, de uma altura de 2m na superfície terrestre (g=10m/s²). Qual sua energia cinética ao colidir com o solo?",
+    "experimentData": {
+      "gravity": 10,
+      "planet": "earth",
+      "initialVelocity": 10,
+      "initialVelocityUn": "ms",
+      "bodyMass": 800,
+      "bodyMassUn": "g",
+      "fallHeight": 2
     },
-    {
-        "number": 3,
-        "title": "Pergunta Três",
-        "text": "Um corpo de 25kg caiu de uma altura de 2m na atmosfera de Marte. Qual sua energia cinética ao tocar o solo? Considere g de marte como 4m/s²",
-        "experimentData": {
-            "gravity" : 4,
-            "planet" : "mars",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 25,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 2
-
-        },
-        "options":["600 J", "512 J", "200 J", "20 J", "160 J"]
-
+    "options": ["6 J", "56 J", "60 J", "21 J", "560 J"]
+  },
+  {
+    "number": 3,
+    "title": "Pergunta Três",
+    "text": "Um corpo de 25kg caiu de uma altura de 2m na atmosfera de Marte. Qual sua energia cinética ao tocar o solo? Considere g de marte como 4m/s²",
+    "experimentData": {
+      "gravity": 4,
+      "planet": "mars",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 25,
+      "bodyMassUn": "kg",
+      "fallHeight": 2
     },
-    {
-        "number": 4,
-        "title": "Pergunta Quatro",
-        "text": "Um corpo foi solto do repouso de uma altura de 2m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 2 metros, sua energia cinética era de 2500J. Qual a massa do corpo em kilogramas?",
-        "experimentData": {
-            "gravity" : 25,
-            "planet" : "jupiter",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 50,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 2
-
-        },
-        "options":["50 kg", "21 kg", "200 kg", "500 kg", "5000 kg"]
+    "options": ["600 J", "512 J", "200 J", "20 J", "160 J"]
+  },
+  {
+    "number": 4,
+    "title": "Pergunta Quatro",
+    "text": "Um corpo foi solto do repouso de uma altura de 2m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 2 metros, sua energia cinética era de 2500J. Qual a massa do corpo em kilogramas?",
+    "experimentData": {
+      "gravity": 25,
+      "planet": "jupiter",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 50,
+      "bodyMassUn": "kg",
+      "fallHeight": 2
     },
-    {
-        "number": 5,
-        "title": "Pergunta Cinco",
-        "text": "Qual a velocidade final atingida por um corpo de 2Kg ao cair de uma altura de 2m na superfície da Lua? Considere g = 1.6m/s²",
-        "experimentData": {
-            "gravity" : 1.6,
-            "planet" : "moon",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 2,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 2
-
-        },
-        "options":["2.53 m/s", "25.3 m/s", "9.1 m/s", "72 m/s", "16 m/s"]
+    "options": ["50 kg", "21 kg", "200 kg", "500 kg", "5000 kg"]
+  },
+  {
+    "number": 5,
+    "title": "Pergunta Cinco",
+    "text": "Qual a velocidade final atingida por um corpo de 2Kg ao cair de uma altura de 2m na superfície da Lua? Considere g = 1.6m/s²",
+    "experimentData": {
+      "gravity": 1.6,
+      "planet": "moon",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 2,
+      "bodyMassUn": "kg",
+      "fallHeight": 2
     },
-    {
-        "number": 6,
-        "title": "Pergunta Seis",
-        "text": "Qual a velocidade final atingida por um corpo de 7Kg ao cair de uma altura de 13m na superfície da Lua? Considere g = 1.6m/s²",
-        "experimentData": {
-            "gravity" : 1.6,
-            "planet" : "moon",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 7,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 13
-
-        },
-        "options":["64.5 m/s", "6.45 m/s", "23.22 m/s", "36 m/s", "10 m/s"]
+    "options": ["2.53 m/s", "25.3 m/s", "9.1 m/s", "72 m/s", "16 m/s"]
+  },
+  {
+    "number": 6,
+    "title": "Pergunta Seis",
+    "text": "Qual a velocidade final atingida por um corpo de 7Kg ao cair de uma altura de 13m na superfície da Lua? Considere g = 1.6m/s²",
+    "experimentData": {
+      "gravity": 1.6,
+      "planet": "moon",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 7,
+      "bodyMassUn": "kg",
+      "fallHeight": 13
     },
-    {
-        "number": 7,
-        "title": "Pergunta Sete",
-        "text": "Um corpo foi solto do repouso de uma altura de 10m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 8 metros, sua energia cinética era de 3000J. Qual a massa do corpo em kilogramas?",
-        "experimentData": {
-            "gravity" : 25,
-            "planet" : "jupiter",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 15,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 8
-
-        },
-        "options":["15 kg", "150 kg", "200 kg", "13 kg", "20 kg"]
+    "options": ["64.5 m/s", "6.45 m/s", "23.22 m/s", "36 m/s", "10 m/s"]
+  },
+  {
+    "number": 7,
+    "title": "Pergunta Sete",
+    "text": "Um corpo foi solto do repouso de uma altura de 10m na atmosfera de Júpiter (g = 25m/s²). Um cientista notou que após cair por 8 metros, sua energia cinética era de 3000J. Qual a massa do corpo em kilogramas?",
+    "experimentData": {
+      "gravity": 25,
+      "planet": "jupiter",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 15,
+      "bodyMassUn": "kg",
+      "fallHeight": 8
     },
-    {
-        "number": 8,
-        "title": "Pergunta Oito",
-        "text": "Qual a velocidade final de um corpo de 10kg ao cair (do repouso) de uma altura de 20m na superfície terrestre? Considere g = 10m/s²?",
-        "experimentData": {
-            "gravity" : 10,
-            "planet" : "earth",
-            "initialVelocity" : 0,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 10,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 20
-        },
-        "options":["20 m/s", "200 m/s", "13.6 m/s", "130.6 m/s", "40 m/s"]
+    "options": ["15 kg", "150 kg", "200 kg", "13 kg", "20 kg"]
+  },
+  {
+    "number": 8,
+    "title": "Pergunta Oito",
+    "text": "Qual a velocidade final de um corpo de 10kg ao cair (do repouso) de uma altura de 20m na superfície terrestre? Considere g = 10m/s²?",
+    "experimentData": {
+      "gravity": 10,
+      "planet": "earth",
+      "initialVelocity": 0,
+      "initialVelocityUn": "ms",
+      "bodyMass": 10,
+      "bodyMassUn": "kg",
+      "fallHeight": 20
     },
-    {
-        "number": 9,
-        "title": "Pergunta Nove",
-        "text" : "Um corpo de 20kg foi arremessado com velocidade inicial de 5m/s em direção ao solo, de uma altura de 10m na superfície terrestre (g=10m/s²). Qual sua energia cinética ao colidir com o solo?",
-        "experimentData": {
-            "gravity" : 10,
-            "planet" : "earth",
-            "initialVelocity" : 5,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 20,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 10
-
-        },
-        "options":["2250 J", "15 J", "150 J", "225 J", "20 J"]
+    "options": ["20 m/s", "200 m/s", "13.6 m/s", "130.6 m/s", "40 m/s"]
+  },
+  {
+    "number": 9,
+    "title": "Pergunta Nove",
+    "text": "Um corpo de 20kg foi arremessado com velocidade inicial de 5m/s em direção ao solo, de uma altura de 10m na superfície terrestre (g=10m/s²). Qual sua energia cinética ao colidir com o solo?",
+    "experimentData": {
+      "gravity": 10,
+      "planet": "earth",
+      "initialVelocity": 5,
+      "initialVelocityUn": "ms",
+      "bodyMass": 20,
+      "bodyMassUn": "kg",
+      "fallHeight": 10
     },
-    {
-        "number": 10,
-        "title": "Pergunta 10",
-        "text": "Um corpo de 25kg foi arremessado em direção ao chão a uma velocidade de 72km/h, de uma altura de 22m na atmosfera de Marte. Sua velocidade ao tocar o solo? Considere g de marte como 4m/s²",
-        "experimentData": {
-            "gravity" : 4,
-            "planet" : "mars",
-            "initialVelocity" : 20,
-            "initialVelocityUn" : "ms",
-            "bodyMass" : 25,
-            "bodyMassUn" : "kg",
-            "fallHeight" : 22
-
-        },
-        "options":["24 m/s", "73.21 m/s", "12 m/s", "20 m/s", "120 m/s"]
-    }
-
+    "options": ["2250 J", "15 J", "150 J", "225 J", "20 J"]
+  },
+  {
+    "number": 10,
+    "title": "Pergunta 10",
+    "text": "Um corpo de 25kg foi arremessado em direção ao chão a uma velocidade de 72km/h, de uma altura de 22m na atmosfera de Marte. Sua velocidade ao tocar o solo? Considere g de marte como 4m/s²",
+    "experimentData": {
+      "gravity": 4,
+      "planet": "mars",
+      "initialVelocity": 20,
+      "initialVelocityUn": "ms",
+      "bodyMass": 25,
+      "bodyMassUn": "kg",
+      "fallHeight": 22
+    },
+    "options": ["24 m/s", "73.21 m/s", "12 m/s", "20 m/s", "120 m/s"]
+  }
 ]

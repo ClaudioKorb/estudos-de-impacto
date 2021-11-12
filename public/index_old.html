@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <link rel="stylesheet" href="loginpage.css">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Estudos de Impacto</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+        <script src="https://cdn.socket.io/4.0.2/socket.io.min.js" integrity="sha384-Bkt72xz1toXkj/oEiOgkQwWKbvNYxTNWMqdon3ejP6gwq53zSo48nW5xACmeDV0F" crossorigin="anonymous"></script>
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    </head>
+    
+    <body>
+        <div id="login">
+            <div class="container">
+                <div id="login-row" class="row justify-content-center align-items-center">
+                    <div id="login-column" class="col-md-6">
+                        <div id="login-box" class="col-md-12">
+                            <div id="login-form" class="form">
+                                <h3 class="text-center text-info">Bem vindo!</h3>
+                                <div class="form-group">
+                                    <label for="username" class="text">Nome</label><br>
+                                    <input type="text" name="username" id="username" class="form-control">
+                                </div>
+                                <div class="form-group mt-2">
+                                        <input type="submit" id = "acessar-prova" name="submit-test" class="btn btn-info btn-md" value="Acessar Prova">
+                                    <input type="submit" id = "acessar-simulador" name="submit-simulator" class="btn btn-outline-secondary" value="Acessar Simulador" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+        let socket;
+        //socket = io.connect('http://localhost:3000');
+        socket = io.connect(document.location.href);
+        let acessarProva = document.getElementById("acessar-prova");
+
+        let cookies = cookieParser(document.cookie);
+        if(document.cookie){
+            if(cookies['studentID']){
+            window.location.replace("/test.html");
+            document.cookie = 'login=no;'; 
+            }
+        }
+
+        acessarProva.addEventListener('click', function(){
+            let studentName = document.getElementById('username').value;
+            if(studentName){
+                document.cookie = 'nome='+ studentName + ";";
+                document.cookie = 'socketId=' + socket.id; + ";"
+                document.cookie = 'login=ok;'; 
+                let thisId = generateID();
+                document.cookie = 'studentID=' + thisId;
+                let studentData = {
+                    name : studentName,
+                    id : thisId
+                }
+                window.location.replace("/test.html")
+            }else{
+                alert("Insira seu nome!");
+            }
+        })
+
+        let acessarSimulador = document.getElementById('acessar-simulador');
+        acessarSimulador.addEventListener('click', function(){
+            window.location.replace("/simulator.html");
+        })
+
+        function cookieParser(cookieString){
+            if(!cookieString){
+                return null;
+            }
+            let stringToParse = cookieString;
+            let stringArray = stringToParse.split(";");
+            let cookies = {};
+            for(let string of stringArray){
+                let key = string.split("=")[0];
+                key = key.trim();
+                let value = string.split("=")[1];
+                value = value.trim();
+                cookies[key] = value;
+            }
+            return cookies;
+        }
+
+        function generateID() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+    </script>
+    </body>
+    
+</html>
