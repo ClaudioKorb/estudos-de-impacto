@@ -1,164 +1,227 @@
-let socket;
+let socket; //socket used to send data to the server
+//Body related variables
 let myfallBody;
 let bottomBarrier;
-let gravity = 9.81; //standard Earth gravity acceleration
-let framerate = 120;
 let myTimer = new Timer();
 let timerFont;
-let fallHeight = 2; //meters
+//Drawing related variables
+let framerate = 120;
 let scale;
-let fallButton = document.getElementById("fall-button");
-let resetButton = document.getElementById("reset-button");
-let fallHeigthText = document.getElementById('fall-height');
-let showVelCheckBox = document.getElementById('show-velocity-check');
-let showEnergyCheckBox = document.getElementById('show-energy-check');
-let massInput = document.getElementById('object-mass-input');
-let speedUnityMS = document.getElementById('initial-velocity-dropdown-ms');
-let speedUnityKH = document.getElementById('initial-velocity-dropdown-kh');
-let speedUnityKS = document.getElementById('initial-velocity-dropdown-ks');
-let initVelocityCheck = document.getElementById('initial-velocity-check');
-let speedUnity = 0; //0 == m/s, 1 == km/h
-let loaded = false;
-let canvasWidth = 400;
-let canvasHeight = 660;
-let myID = '';
+let canvasWidth = 350;
+let fallHeightPx = 470;
+let startingPointPx = 30;
+let barrierHeightPx = 30;
+let canvasHeight = fallHeightPx + startingPointPx + barrierHeightPx;
+let bg;
+let strokeColour = 'white';
 
-function setup(){
-    socket = io.connect(document.location.origin);
+//World configuration
+let worldData = {
+  gravity: 10,
+  planet: 'earth',
+  initialVelocity: 0,
+  initialVelocityUn: 'ms',
+  bodyMass: 1,
+  bodyMassUn: 'kg',
+  fallHeight: 2,
+};
+//Document utilities
+let fallButton = document.getElementById('fall-button');
+let resetButton = document.getElementById('reset-button');
+let objectMass = document.getElementById('object-mass-input');
+let initialVelocity = document.getElementById('initial-velocity-input');
+let initialVelocityCheck = document.getElementById('initial-velocity-check');
+let fallHeightRange = document.getElementById('height-slider');
+let earthIcon = document.getElementById('earth-icon');
+let marsIcon = document.getElementById('mars-icon');
+let jupiterIcon = document.getElementById('jupiter-icon');
+let moonIcon = document.getElementById('moon-icon');
 
-    let canvas;
-    loaded = true;
-    canvas = createCanvas(canvasWidth,canvasHeight);
-    width = canvasWidth;
-    height = canvasHeight;
-    canvas.parent('sketch-holder');
-    frameRate(framerate);
-    bottomBarrier = new Barrier(0, height - 30, width, height-30);
-
-    myfallBody = new fallBody();
-    scale = fallHeight / 600;
-    textSize(18);
-    textFont(timerFont);
-    let cookies = cookieParser(document.cookie);
-    myID = cookies['studentID'];
+function setup() {
+  //Parsing session cookies into dictionary for easy manipulation
+  cookies = cookieParser(document.cookie);
+  //connecting socket to server
+  myID = cookies['studentID'];
+  socket = io.connect(document.location.origin);
+  //initializing canvas for drawing the simulation
+  let canvas;
+  canvas = createCanvas(canvasWidth, canvasHeight);
+  width = canvasWidth;
+  height = canvasHeight;
+  canvas.parent('sketch-holder');
+  bg = loadImage('assets\\img\\earth.png');
+  frameRate(framerate);
+  //-----------------------------------------------
+  //Defining variables for the texts shown on the sketch screen
+  textSize(18);
+  textFont(timerFont);
+  //------------------------------------------------
+  //Creating instances for bottom barrier and fall body
+  bottomBarrier = new Barrier(0, height - 30, width, height - 30);
+  myfallBody = new fallBody();
+  //-----------------------------------------------
+  //Defining the scale, used in calculations.
+  //The cauculation of the velocity of the body, depends on it's position, which is measured in
+  // meters. The rendering of the animation, on the other hand, is measured in pixels. Therefore, we
+  // need to define a scale (m/px) to use in defining the position of the body on the screen.
+  scale = worldData.fallHeight / fallHeightPx;
+  //------------------------------------------------
 }
 
-function preload(){
-    timerFont = loadFont('assets\\fonts\\Roboto-Thin.ttf');
+function preload() {
+  timerFont = loadFont('assets\\fonts\\Roboto-Thin.ttf');
 }
 
-function draw(){
-    if(loaded){
-        background('#4abdac');
-        myfallBody.update();
-        myfallBody.show();
-        bottomBarrier.show();
-        fill('#DFDCE3');
-        text(paddy(myTimer.min, 2)+":"+paddy(myTimer.sec, 2)+":"+paddy(myTimer.mili, 3), 320, 20);
-        fallHeigthText.innerHTML = document.getElementById('fall-height-range').value + "m";
-        if(initVelocityCheck.checked){
-            document.getElementById('dropdown-initial-velocity').disabled = false;
-            document.getElementById('initial-velocity-input').disabled = false;
-    
-        }else{
-            document.getElementById('dropdown-initial-velocity').disabled = true;
-            document.getElementById('initial-velocity-input').disabled = true;
-        }
-    }
+function draw() {
+  background(bg);
+  myfallBody.show();
+  myfallBody.update();
+  fill('#DFDCE3');
+  text(paddy(myTimer.min, 2) + ':' + paddy(myTimer.sec, 2) + ':' + paddy(myTimer.mili, 3), 320, 20);
 }
 
-setInterval(function(){
-    if(myTimer.running){
-        myTimer.count();
-    }
-},10)
+fallButton.addEventListener('click', () => {
+  createFallBody();
+  startFall();
+});
 
-class ruler{
-    constructor(size, maxPixels, scale){
-        this.sizeOfMark = size / 4.0;
-        this.sizeOfMarkPx = Math.round(parseFloat(this.sizeOfMark) / scale);
-        this.first = 0;
-        this.last = size;
-    }
+fallHeightRange.addEventListener('change', () => {
+  worldData.fallHeight = fallHeightRange.value;
+  scale = worldData.fallHeight / fallHeightPx;
+  console.log(worldData.fallHeight);
+  console.log(scale);
+});
 
-    show(){
-        
-    }
+resetButton.addEventListener('click', () => {
+  createFallBody();
+});
+
+earthIcon.addEventListener('click', () => {
+  earthIcon.classList.add('selected');
+  marsIcon.classList.remove('selected');
+  jupiterIcon.classList.remove('selected');
+  moonIcon.classList.remove('selected');
+  worldData.planet = 'earth';
+  worldData.gravity = 10;
+  bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+});
+
+marsIcon.addEventListener('click', () => {
+  earthIcon.classList.remove('selected');
+  marsIcon.classList.add('selected');
+  jupiterIcon.classList.remove('selected');
+  moonIcon.classList.remove('selected');
+  worldData.planet = 'mars';
+  worldData.gravity = 4;
+  bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+});
+
+jupiterIcon.addEventListener('click', () => {
+  earthIcon.classList.remove('selected');
+  marsIcon.classList.remove('selected');
+  jupiterIcon.classList.add('selected');
+  moonIcon.classList.remove('selected');
+  worldData.planet = 'jupiter';
+  worldData.gravity = 25;
+  bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+});
+
+moonIcon.addEventListener('click', () => {
+  earthIcon.classList.remove('selected');
+  marsIcon.classList.remove('selected');
+  jupiterIcon.classList.remove('selected');
+  moonIcon.classList.add('selected');
+  worldData.planet = 'moon';
+  worldData.gravity = 1.6;
+  bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+});
+
+setInterval(function () {
+  if (myTimer.running) {
+    myTimer.count();
+  }
+}, 10);
+
+function cookieParser(cookieString) {
+  if (!cookieString) {
+    return null;
+  }
+  let stringToParse = cookieString;
+  let stringArray = stringToParse.split(';');
+  let cookies = {};
+  for (let string of stringArray) {
+    let key = string.split('=')[0];
+    key = key.trim();
+    let value = string.split('=')[1];
+    value = value.trim();
+    cookies[key] = value;
+  }
+  return cookies;
 }
 
+function createFallBody() {
+  let bodyMass;
+  worldData.bodyMass = objectMass.value;
+  if (worldData.bodyMass == '') {
+    worldData.bodyMass = 1;
+  }
+  switch (worldData.bodyMassUn) {
+    case 'kg':
+      bodyMass = worldData.bodyMass;
+      break;
+    case 'g':
+      bodyMass = worldData.bodyMass / 1000;
+      break;
+    case 'ton':
+      bodyMass = worldData.bodyMass * 1000;
+      break;
+    default:
+      bodyMass = worldData.bodyMass;
+      break;
+  }
+  myfallBody = new fallBody(bodyMass);
+}
 
-showVelCheckBox.addEventListener('change', function(event){
-    if(event.currentTarget.checked){
-        myfallBody.tooltip.setShowVel(true);
-        console.log("checked");
-    }else{
-        myfallBody.tooltip.setShowVel(false);
-        console.log("unchecked");
+function startFall() {
+  let initialVel;
+
+  if (initialVelocityCheck.checked) {
+    worldData.initialVelocity = initialVelocity.value;
+    switch (worldData.initialVelocityUn) {
+      case 'ms':
+        initialVel = worldData.initialVelocity;
+        break;
+      case 'kh':
+        initialVel = worldData.initialVelocity / 3.6;
+        break;
+      case 'ks':
+        initialVel = worldData.initialVelocity * 1000;
+      default:
+        initialVel = worldData.initialVelocity;
     }
-})
+  } else {
+    initialVelocity = 0;
+  }
+  myfallBody.fall(initialVel);
+}
 
-showEnergyCheckBox.addEventListener('change', function(event){
-    if(event.currentTarget.checked){
-        myfallBody.tooltip.setShowEnergy(true);
-        console.log("checked");
-    }else{
-        myfallBody.tooltip.setShowEnergy(false);
-        console.log("unchecked");
-    }
-})
+function deleteAllCookies() {
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf('=');
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  }
+}
 
-speedUnityMS.addEventListener('click', function(){
-    document.getElementById('initial-velocity-input').placeholder = "Em m/s"
-    speedUnity = 0;
-})
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-speedUnityKH.addEventListener('click', function(){
-    document.getElementById('initial-velocity-input').placeholder = "Em km/h"
-    speedUnity = 1;
-})
-
-fallButton.addEventListener('click', function(){
-    fallHeight = document.getElementById('fall-height-range').value;
-    console.log("fallHeight = " + fallHeight);
-    scale = fallHeight / 600;
-    myTimer.start();
-    myfallBody = new fallBody(parseFloat(massInput.value));
-    if(initVelocityCheck.checked){
-        switch(speedUnity){
-            case 0:
-                myfallBody.fall(parseInt(document.getElementById('initial-velocity-input').value));
-                break;
-            case 1:
-                myfallBody.fall(parseInt(document.getElementById('initial-velocity-input').value)/3.6);
-            default:
-                myfallBody.fall();
-        }
-    }else{
-        myfallBody.fall();
-    }
-})
-
-resetButton.addEventListener('click', function(){
-    fallHeight = document.getElementById('fall-height-range').value;
-    scale = fallHeight / 600;
-    myTimer.stop();
-    myTimer.reset();
-    myfallBody = new fallBody(massInput.value);
-})
-
-function cookieParser(cookieString){
-    if(!cookieString){
-        return null;
-    }
-    let stringToParse = cookieString;
-    let stringArray = stringToParse.split(";");
-    let cookies = {};
-    for(let string of stringArray){
-        let key = string.split("=")[0];
-        key = key.trim();
-        let value = string.split("=")[1];
-        value = value.trim();
-        cookies[key] = value;
-    }
-    return cookies;
+function roundIt(value, precision) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
 }
