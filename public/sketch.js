@@ -1,4 +1,3 @@
-let socket; //socket used to send data to the server
 //Body related variables
 let myfallBody;
 let bottomBarrier;
@@ -38,11 +37,6 @@ let jupiterIcon = document.getElementById('jupiter-icon');
 let moonIcon = document.getElementById('moon-icon');
 
 function setup() {
-  //Parsing session cookies into dictionary for easy manipulation
-  cookies = cookieParser(document.cookie);
-  //connecting socket to server
-  myID = cookies['studentID'];
-  socket = io.connect(document.location.origin);
   //initializing canvas for drawing the simulation
   let canvas;
   canvas = createCanvas(canvasWidth, canvasHeight);
