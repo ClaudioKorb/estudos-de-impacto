@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles/simulatorpage.css" />
+    <link rel="stylesheet" media="screen and (min-width: 900px)" href="./styles/simulatorpage.css" />
+    <link rel="stylesheet" media="screen and (max-width: 900px)" href="./styles/simulatorpagemobile.css" />
     <title>Collision simulator</title>
 
     <script src="https://cdn.socket.io/4.0.2/socket.io.min.js" integrity="sha384-Bkt72xz1toXkj/oEiOgkQwWKbvNYxTNWMqdon3ejP6gwq53zSo48nW5xACmeDV0F" crossorigin="anonymous"></script>
@@ -33,7 +34,7 @@
             </div>
             <span class="height-slider-label">Altura da queda</span>
           </div>
-          <label class="custom-field">
+          <label class="custom-field" id="input1">
             <input id="object-mass-input" type="text" required />
             <span class="placeholder">Massa do objeto (em kg)</span>
           </label>
