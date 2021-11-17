@@ -7,7 +7,9 @@ let timerFont;
 //Drawing related variables
 let framerate = 120;
 let scale;
-let canvasWidth = 400;
+//let canvasWidth = 400;
+//let fallHeightPx = 600;
+let canvasWidth = getWidth() < 500 ? getWidth() - 10 : 400;
 let fallHeightPx = 600;
 let startingPointPx = 30;
 let barrierHeightPx = 30;
@@ -35,7 +37,8 @@ let cardDisplay = document.getElementById('card-div');
 let drawDisplay = document.getElementById('sketch-div');
 let nextButtonDisplay = document.getElementById('next-button-div');
 let replayButton = document.getElementById('replay-div');
-let exitButton = document.getElementById('logout-button');
+let logoutButton = document.getElementById('logout-button');
+let exitButton = document.getElementById('exit-button');
 let answerRadios = [
   document.getElementById('radio-answer-1'),
   document.getElementById('radio-answer-2'),
@@ -248,12 +251,20 @@ nextButtonDisplay.addEventListener('click', function () {
   }
 });
 
-exitButton.addEventListener('click', function () {
+logoutButton.addEventListener('click', function () {
   deleteAllCookies();
   socket.emit('removeMyConnection', myID);
   window.location.replace('/index.html');
 });
 
+exitButton.addEventListener('click', function () {
+  if (confirm('Todo o seu progresso será perdido! Deseja sair?')) {
+    deleteAllCookies();
+    socket.emit('removeMyConnection', myID);
+    window.location.replace('/index.html');
+  } else {
+  }
+});
 /*numberRootButton.addEventListener('click', function () {
   let number = Number(document.getElementById('number').value);
   let root = roundIt(Math.sqrt(number), 2);
@@ -348,6 +359,8 @@ function showQuiz() {
   drawDisplay.classList.add('hide');
   nextButtonDisplay.classList.add('hide');
   replayButton.classList.add('hide');
+  logoutButton.classList.add('hide');
+  exitButton.classList.remove('hide');
 }
 
 function showSketch() {
@@ -355,6 +368,8 @@ function showSketch() {
   drawDisplay.classList.remove('hide');
   nextButtonDisplay.classList.remove('hide');
   replayButton.classList.remove('hide');
+  logoutButton.classList.add('hide');
+  exitButton.classList.add('hide');
 }
 
 function showEndOfTest() {
@@ -365,7 +380,8 @@ function showEndOfTest() {
   document.getElementById('end-text-msg').innerHTML = document.getElementById('end-text-msg').innerHTML + ', ' + cookies['nome'];
   document.getElementById('end-test-text').classList.remove('hide');
   document.getElementById('customizable-text-div').classList.remove('hide');
-  exitButton.classList.remove('hide');
+  logoutButton.classList.remove('hide');
+  exitButton.classList.add('hide');
 }
 
 function deleteAllCookies() {
@@ -404,4 +420,32 @@ function shuffleArray(array) {
 function roundIt(value, precision) {
   var multiplier = Math.pow(10, precision || 0);
   return Math.round(value * multiplier) / multiplier;
+}
+
+function getWidth() {
+  if (self.innerWidth) {
+    return self.innerWidth;
+  }
+
+  if (document.documentElement && document.documentElement.clientWidth) {
+    return document.documentElement.clientWidth;
+  }
+
+  if (document.body) {
+    return document.body.clientWidth;
+  }
+}
+
+function getHeight() {
+  if (self.innerHeight) {
+    return self.innerHeight;
+  }
+
+  if (document.documentElement && document.documentElement.clientHeight) {
+    return document.documentElement.clientHeight;
+  }
+
+  if (document.body) {
+    return document.body.clientHeight;
+  }
 }

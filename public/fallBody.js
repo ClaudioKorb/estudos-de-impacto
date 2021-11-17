@@ -1,15 +1,17 @@
 class fallBody {
-  constructor(mass, xpos, ypos, diameter, myColor) {
+  constructor(mass, xpos, ypos, diameter, myColor, hideSpeed, hideEnergy) {
     diameter ? (this.diameter = diameter) : (this.diameter = 40);
     mass ? (this.mass = mass) : (this.mass = 1);
     xpos ? (this.xpos = xpos) : (this.xpos = width / 2);
     ypos ? (this.ypos = ypos) : (this.ypos = startingPointPx - this.diameter / 2);
     myColor ? (this.color = myColor) : (this.color = color(51)); //'#fc4a1a'
+    hideSpeed ? (this.showSpeed = false) : (this.showSpeed = true);
+    hideEnergy ? (this.showEnergy = false) : (this.showEnergy = true);
     this.speed = 0;
     this.acc = 0;
     this.energy = 0;
     this.lastSpeed = 0;
-    this.tooltip = new tooltip(this.xpos, this.ypos, true, true);
+    this.tooltip = new tooltip(this.xpos, this.ypos, this.showSpeed, this.showEnergy);
   }
 
   show() {
@@ -87,6 +89,22 @@ class fallBody {
 
   setMass(mValue) {
     this.mass = mValue;
+  }
+
+  showVel() {
+    this.tooltip.setShowVel(true);
+  }
+
+  hideVel() {
+    this.tooltip.setShowVel(false);
+  }
+
+  showEn() {
+    this.tooltip.setShowEnergy(true);
+  }
+
+  hideEn() {
+    this.tooltip.setShowEnergy(false);
   }
 }
 

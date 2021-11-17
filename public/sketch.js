@@ -12,9 +12,10 @@ let startingPointPx = 30;
 let barrierHeightPx = 30;
 let canvasHeight = fallHeightPx + startingPointPx + barrierHeightPx;
 let bg;
-let strokeColour = 'white';
+let strokeColour = 'black';
 
 //World configuration
+let velShow = false;
 let worldData = {
   gravity: 10,
   planet: 'earth',
@@ -30,6 +31,8 @@ let resetButton = document.getElementById('reset-button');
 let objectMass = document.getElementById('object-mass-input');
 let initialVelocity = document.getElementById('initial-velocity-input');
 let initialVelocityCheck = document.getElementById('initial-velocity-check');
+let showVelocity = document.getElementById('show-velocity-check');
+let showEnergy = document.getElementById('show-energy-check');
 let fallHeightRange = document.getElementById('height-slider');
 let earthIcon = document.getElementById('earth-icon');
 let marsIcon = document.getElementById('mars-icon');
@@ -47,12 +50,12 @@ function setup() {
   frameRate(framerate);
   //-----------------------------------------------
   //Defining variables for the texts shown on the sketch screen
-  textSize(18);
+  textSize(14);
   textFont(timerFont);
   //------------------------------------------------
   //Creating instances for bottom barrier and fall body
   bottomBarrier = new Barrier(0, height - 30, width, height - 30);
-  myfallBody = new fallBody();
+  myfallBody = new fallBody(null, null, null, null, null, true);
   //-----------------------------------------------
   //Defining the scale, used in calculations.
   //The cauculation of the velocity of the body, depends on it's position, which is measured in
@@ -75,7 +78,7 @@ function draw() {
 }
 
 fallButton.addEventListener('click', () => {
-  createFallBody();
+  createFallBody(showVelocity.checked, showEnergy.checked);
   startFall();
 });
 
@@ -86,8 +89,24 @@ fallHeightRange.addEventListener('change', () => {
   console.log(scale);
 });
 
+showVelocity.addEventListener('change', () => {
+  if (showVelocity.checked) {
+    myfallBody.showVel();
+  } else {
+    myfallBody.hideVel();
+  }
+});
+
+showEnergy.addEventListener('change', () => {
+  if (showEnergy.checked) {
+    myfallBody.showEn();
+  } else {
+    myfallBody.hideEn();
+  }
+});
+
 resetButton.addEventListener('click', () => {
-  createFallBody();
+  createFallBody(showVelocity.checked, showEnergy.checked);
 });
 
 earthIcon.addEventListener('click', () => {
@@ -98,6 +117,7 @@ earthIcon.addEventListener('click', () => {
   worldData.planet = 'earth';
   worldData.gravity = 10;
   bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+  strokeColour = 'black';
 });
 
 marsIcon.addEventListener('click', () => {
@@ -108,6 +128,7 @@ marsIcon.addEventListener('click', () => {
   worldData.planet = 'mars';
   worldData.gravity = 4;
   bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+  strokeColour = 'white';
 });
 
 jupiterIcon.addEventListener('click', () => {
@@ -118,6 +139,7 @@ jupiterIcon.addEventListener('click', () => {
   worldData.planet = 'jupiter';
   worldData.gravity = 25;
   bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+  strokeColour = 'black';
 });
 
 moonIcon.addEventListener('click', () => {
@@ -128,6 +150,7 @@ moonIcon.addEventListener('click', () => {
   worldData.planet = 'moon';
   worldData.gravity = 1.6;
   bg = loadImage('assets\\img\\' + worldData.planet + '.png');
+  strokeColour = 'white';
 });
 
 setInterval(function () {
@@ -153,7 +176,7 @@ function cookieParser(cookieString) {
   return cookies;
 }
 
-function createFallBody() {
+function createFallBody(showVel, showEn) {
   let bodyMass;
   worldData.bodyMass = objectMass.value;
   if (worldData.bodyMass == '') {
@@ -173,7 +196,7 @@ function createFallBody() {
       bodyMass = worldData.bodyMass;
       break;
   }
-  myfallBody = new fallBody(bodyMass);
+  myfallBody = new fallBody(bodyMass, null, null, null, null, !showVel, !showEn);
 }
 
 function startFall() {
