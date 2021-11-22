@@ -218,7 +218,7 @@ function startFall() {
         initialVel = worldData.initialVelocity;
     }
   } else {
-    initialVelocity = 0;
+    initialVel = 0;
   }
   myfallBody.fall(initialVel);
 }
