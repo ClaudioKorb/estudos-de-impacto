@@ -203,7 +203,8 @@ function startFall() {
   let initialVel;
 
   if (initialVelocityCheck.checked) {
-    worldData.initialVelocity = initialVelocity.value;
+    console.log(parseFloat(initialVelocity.value));
+    worldData.initialVelocity = parseFloat(initialVelocity.value);
     switch (worldData.initialVelocityUn) {
       case 'ms':
         initialVel = worldData.initialVelocity;

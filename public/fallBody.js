@@ -33,6 +33,7 @@ class fallBody {
 
   fall(speed) {
     this.acc = worldData.gravity;
+    console.log('asdsa:' + speed);
     if (speed) {
       this.speed = speed;
       console.log('SPEED: ' + this.speed);
@@ -43,6 +44,7 @@ class fallBody {
   }
 
   update() {
+    console.log(this.speed);
     if (this.speed > 0) {
       this.acc = worldData.gravity;
     }
