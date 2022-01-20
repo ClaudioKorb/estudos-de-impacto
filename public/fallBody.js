@@ -35,7 +35,6 @@ class fallBody {
     this.acc = worldData.gravity;
     if (speed) {
       this.speed = speed;
-      console.log('SPEED: ' + this.speed);
     } else {
       speed = 0;
     }
@@ -43,7 +42,6 @@ class fallBody {
   }
 
   update() {
-    console.log(this.speed);
     if (this.speed > 0) {
       this.acc = worldData.gravity;
     }
@@ -58,7 +56,7 @@ class fallBody {
         }
       } else {
         this.speed += this.acc * (1 / framerate);
-        this.ypos += this.speed / (framerate * scale);
+        this.ypos += this.speed / (framerate * worldScale);
       }
     }
     // if(this.ypos + this.diameter/2 >= height){
@@ -135,7 +133,7 @@ class tooltip {
       noFill();
       stroke(strokeColour);
       textFont(timerFont);
-      text('V = ' + roundIt(speed, 2) + ' m/s', this.xpos + 60, this.ypos - 5);
+      text('V = ' + roundIt(speed, 1) + ' m/s', this.xpos + 60, this.ypos - 5);
     }
   }
 

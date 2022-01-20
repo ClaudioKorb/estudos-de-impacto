@@ -5,12 +5,13 @@ let myTimer = new Timer();
 let timerFont;
 //Drawing related variables
 let framerate = 120;
-let scale;
 let canvasWidth = 350;
 let fallHeightPx = 470;
-let startingPointPx = 30;
 let barrierHeightPx = 30;
-let canvasHeight = fallHeightPx + startingPointPx + barrierHeightPx;
+let canvasHeight = 530;
+worldScale = 100 / fallHeightPx;
+let startingPointPx = canvasHeight - 50 / worldScale - 30;
+
 let bg;
 let strokeColour = 'black';
 
@@ -23,7 +24,7 @@ let worldData = {
   initialVelocityUn: 'ms',
   bodyMass: 1,
   bodyMassUn: 'kg',
-  fallHeight: 2,
+  fallHeight: 10,
 };
 //Document utilities
 let fallButton = document.getElementById('fall-button');
@@ -48,6 +49,7 @@ function setup() {
   canvas.parent('sketch-holder');
   bg = loadImage('assets\\img\\earth.png');
   frameRate(framerate);
+
   //-----------------------------------------------
   //Defining variables for the texts shown on the sketch screen
   textSize(14);
@@ -57,11 +59,10 @@ function setup() {
   bottomBarrier = new Barrier(0, height - 30, width, height - 30);
   myfallBody = new fallBody(null, null, null, null, null, true);
   //-----------------------------------------------
-  //Defining the scale, used in calculations.
+  //Defining the worldScale, used in calculations.
   //The cauculation of the velocity of the body, depends on it's position, which is measured in
   // meters. The rendering of the animation, on the other hand, is measured in pixels. Therefore, we
   // need to define a scale (m/px) to use in defining the position of the body on the screen.
-  scale = worldData.fallHeight / fallHeightPx;
   //------------------------------------------------
 }
 
@@ -84,9 +85,8 @@ fallButton.addEventListener('click', () => {
 
 fallHeightRange.addEventListener('change', () => {
   worldData.fallHeight = fallHeightRange.value;
-  scale = worldData.fallHeight / fallHeightPx;
-  console.log(worldData.fallHeight);
-  console.log(scale);
+  startingPointPx = canvasHeight - fallHeightRange.value / worldScale - 30;
+  // worldScale = worldData.fallHeight / fallHeightPx;
 });
 
 showVelocity.addEventListener('change', () => {
@@ -203,7 +203,6 @@ function startFall() {
   let initialVel;
 
   if (initialVelocityCheck.checked) {
-    console.log(parseFloat(initialVelocity.value));
     worldData.initialVelocity = parseFloat(initialVelocity.value);
     switch (worldData.initialVelocityUn) {
       case 'ms':
