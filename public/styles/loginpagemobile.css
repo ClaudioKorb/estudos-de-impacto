@@ -131,3 +131,10 @@ body {
 .custom-button.r:hover {
   box-shadow: inset 250px 0 0 0 var(--slate-blue);
 }
+
+.forms-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+}

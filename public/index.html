@@ -13,20 +13,27 @@
   </head>
 
   <body>
-    <div class="content-container" id="login">
-      <div class="login-header">
-        <p class="greetings-text">Bem vindo!</p>
-      </div>
-      <div class="form-container">
-        <label class="custom-field">
-          <input id="username" type="text" required />
-          <span class="placeholder">Insira seu nome</span>
-        </label>
-        <div class="button-container">
-          <button class="custom-button" id="acessar-prova">Acessar Prova</button>
-          <button class="custom-button r" id="acessar-simulador">Acessar Simulador</button>
+    <div class="outern-container" style="display:flex;flex-direction: column;">
+      <div class="content-container" id="login">
+        <div class="login-header">
+          <p class="greetings-text">Bem vindo!</p>
+        </div>
+        <div class="form-container">
+          <label class="custom-field">
+            <input id="username" type="text" required />
+            <span class="placeholder">Insira seu nome</span>
+          </label>
+          <div class="button-container">
+            <button class="custom-button" id="acessar-prova">Acessar Prova</button>
+            <button class="custom-button r" id="acessar-simulador">Acessar Simulador</button>
+          </div>
         </div>
       </div>
+        <div class="forms-container">
+          <form action="https://forms.gle/2nAgrm9cSVRMCVyv8" target="_blank">
+            <button type="submit" class="custom-button" id="forms-button">Responder Pesquisa</button>
+          </form>
+        </div>  
     </div>
 
     <script>
