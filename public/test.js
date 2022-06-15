@@ -1,22 +1,24 @@
+let MAX_HEIGHT_METERS = 30;
+let BOTTOM_BARRIER_HEIGHT_PX = 30;
 let socket; //socket used to send data to the server
 //Body related variables
 let myfallBody;
 let bottomBarrier;
 let myTimer = new Timer();
 let timerFont;
+
 //Drawing related variables
 let framerate = 120;
-let scale;
-//let canvasWidth = 400;
-//let fallHeightPx = 600;
-let canvasWidth = getWidth() < 500 ? getWidth() - 10 : 400;
-let fallHeightPx = 600;
-let startingPointPx = 30;
-let barrierHeightPx = 30;
-let canvasHeight = fallHeightPx + startingPointPx + barrierHeightPx;
+let canvasWidth = 420;
+let barrierHeightPx = BOTTOM_BARRIER_HEIGHT_PX;
+let canvasHeight = 660;
+let fallHeightPx = canvasHeight - barrierHeightPx;
+worldScale = MAX_HEIGHT_METERS / fallHeightPx;
+let startingPointPx = canvasHeight - MAX_HEIGHT_METERS / worldScale - barrierHeightPx;
+
 let bg;
-let strokeColour = 'white';
-let wait = 0;
+let strokeColour = 'black';
+
 
 //World configuration
 let worldData = {
@@ -90,8 +92,8 @@ function setup() {
   textFont(timerFont);
   //------------------------------------------------
   //Creating instances for bottom barrier and fall body
-  bottomBarrier = new Barrier(0, height - 30, width, height - 30);
-  myfallBody = new fallBody();
+  bottomBarrier = new Barrier(0, height - barrierHeightPx, width, height - barrierHeightPx);
+  myfallBody = new fallBody(null, null, null, null, null, true);
   //-----------------------------------------------
   //Defining the scale, used in calculations.
   //The cauculation of the velocity of the body, depends on it's position, which is measured in
@@ -309,6 +311,7 @@ function changeWorldParameters(experimentData) {
   worldData.bodyMass = experimentData.bodyMass;
   worldData.bodyMassUn = experimentData.bodyMassUn;
   worldData.fallHeight = experimentData.fallHeight;
+  startingPointPx = canvasHeight - experimentData.fallHeight / worldScale - barrierHeightPx;
   scale = worldData.fallHeight / fallHeightPx;
   bg = loadImage('assets\\img\\' + worldData.planet + '.png');
   if (worldData.planet == 'earth' || worldData.planet == 'jupiter') {

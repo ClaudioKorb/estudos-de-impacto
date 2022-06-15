@@ -279,25 +279,6 @@ body {
   color: var(--alice-blue);
 }
 
-#object-mass-input {
-  margin-left: 1px;
-  width: 94%;
-}
-
-#input1 {
-  width: 100%;
-}
-
-#velocity {
-  top: -25px;
-  width: 100%;
-}
-
-#initial-velocity-input {
-  margin-right: 5px;
-  width: 93%;
-}
-
 .switch-container .speed {
   margin: 0px;
   width: 100%;
@@ -421,10 +402,42 @@ input:checked + .slider:before {
   margin-left: 10px;
 }
 
-.initial-velocity label{
-  margin-bottom: -5px;
-}
 .initial-velocity input{
-  margin-top: -5px;
   height: 30px;
+  margin-bottom: 5px;
+}
+
+.forms-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+.forms-text{
+  font-weight: 200;
+  margin-top: 0;
+  text-align: center;
+}
+
+.custom-button.g {
+  background-color: var(--eerie-black);
+  box-shadow: inset 0 0 0 0 grey;
+  letter-spacing: 4px;
+  width: 350px;
+  height: 50px;
+  border: none;
+  color: var(--fluorescent-blue);
+  border-radius: 4px;
+  transition: ease-out 0.2s;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+}
+
+.custom-button.g:hover{
+  box-shadow: inset -350px 0 0 0  grey;
 }
