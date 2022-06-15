@@ -118,7 +118,7 @@
       inputSlider.oninput = () => {
         let value = inputSlider.value;
         sliderValue.textContent = value;
-        sliderValue.style.left = value + '%';
+        sliderValue.style.left = (value) + '%';
         sliderValue.classList.add('show');
       };
       inputSlider.onblur = () => {
