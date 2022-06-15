@@ -1,6 +1,7 @@
 let MAX_HEIGHT_METERS = 30;
 let BOTTOM_BARRIER_HEIGHT_PX = 30;
 let socket; //socket used to send data to the server
+
 //Body related variables
 let myfallBody;
 let bottomBarrier;
@@ -9,11 +10,11 @@ let timerFont;
 
 //Drawing related variables
 let framerate = 120;
-let canvasWidth = 420;
+let canvasWidth = window.innerWidth - 10;
 let barrierHeightPx = BOTTOM_BARRIER_HEIGHT_PX;
 let canvasHeight = 660;
 let fallHeightPx = canvasHeight - barrierHeightPx;
-worldScale = MAX_HEIGHT_METERS / fallHeightPx;
+let worldScale = MAX_HEIGHT_METERS / fallHeightPx;
 let startingPointPx = canvasHeight - MAX_HEIGHT_METERS / worldScale - barrierHeightPx;
 
 let bg;
