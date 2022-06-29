@@ -169,7 +169,7 @@ function cookieParser(cookieString) {
 
 function createFallBody(showVel, showEn) {
   let bodyMass;
-  worldData.bodyMass = objectMass.value;
+  worldData.bodyMass = objectMass.value.replace(/\D+/g, '');
   if (worldData.bodyMass == '') {
     worldData.bodyMass = 1;
   }
@@ -194,7 +194,7 @@ function startFall() {
   let initialVel;
 
   if (initialVelocityCheck.checked) {
-    worldData.initialVelocity = parseFloat(initialVelocity.value);
+    worldData.initialVelocity = parseFloat(initialVelocity.value.replace(/\D+/g, ''));
     switch (worldData.initialVelocityUn) {
       case 'ms':
         initialVel = worldData.initialVelocity;
