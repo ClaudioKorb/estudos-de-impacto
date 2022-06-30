@@ -125,12 +125,12 @@ function setup() {
     showSketch();
     if (msgData.correct == true) {
       simulating = true;
-      alert('CORRETO!');
+      alert('Correto \uD83D\uDE00');
       myQuestions.correctQuestions[myQuestions.currentQuestion] = 1;
       myQuestions.questionsWeight[myQuestions.currentQuestion] = 1;
     } else {
       simulating = true;
-      alert('ERRADO!');
+      alert('Errado \uD83D\uDE13');
       myQuestions.correctQuestions[myQuestions.currentQuestion] = 0;
       myQuestions.questionsWeight[myQuestions.currentQuestion] = 0;
     }
