@@ -10,7 +10,7 @@ let timerFont;
 
 //Drawing related variables
 let framerate = 120;
-let canvasWidth = window.innerWidth - 10;
+let canvasWidth = window.innerWidth - 10 > 400 ? 400 : window.innerWidth - 10;
 let barrierHeightPx = BOTTOM_BARRIER_HEIGHT_PX;
 let canvasHeight = 660;
 let fallHeightPx = canvasHeight - barrierHeightPx;
