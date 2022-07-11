@@ -52,18 +52,12 @@ class fallBody {
           this.lastAcc = this.acc;
           this.stop();
           this.ypos = bottomBarrier.y1 - this.diameter / 2;
-          myTimer.stop();
         }
       } else {
         this.speed += this.acc * (1 / framerate);
         this.ypos += this.speed / (framerate * worldScale);
       }
     }
-    // if(this.ypos + this.diameter/2 >= height){
-    //     this.ypos = height - this.diameter/2;
-    //     this.stop();
-    //     myTimer.stop();
-    // }
 
     if (this.speed == 0) {
       this.energy = (1 / 2) * (this.mass * this.lastSpeed * this.lastSpeed);
@@ -113,7 +107,6 @@ class tooltip {
     this.ypos = ypos;
     this.showVel = willShowVel;
     this.showAcc = false;
-    this.showForce = false;
     this.showEn = willShowEnergy;
   }
 

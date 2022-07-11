@@ -1,16 +1,17 @@
+let MAX_FALL_HEIGHT_METERS = 100;
+let INITIAL_HEIGHT_METERS = 50;
 //Body related variables
 let myfallBody;
 let bottomBarrier;
-let myTimer = new Timer();
 let timerFont;
 //Drawing related variables
 let framerate = 120;
 let canvasWidth = 350;
-let fallHeightPx = 470;
 let barrierHeightPx = 30;
 let canvasHeight = 530;
-worldScale = 100 / fallHeightPx;
-let startingPointPx = canvasHeight - 50 / worldScale - 30;
+let fallHeightPx = canvasHeight - barrierHeightPx;
+let worldScale = MAX_FALL_HEIGHT_METERS / fallHeightPx;
+let startingPointPx = canvasHeight - INITIAL_HEIGHT_METERS / worldScale - barrierHeightPx;
 
 let bg;
 let strokeColour = 'black';
@@ -50,10 +51,6 @@ function setup() {
   bg = loadImage('assets\\img\\earth.png');
   frameRate(framerate);
 
-  //-----------------------------------------------
-  //Defining variables for the texts shown on the sketch screen
-  textSize(14);
-  textFont(timerFont);
   //------------------------------------------------
   //Creating instances for bottom barrier and fall body
   bottomBarrier = new Barrier(0, height - 30, width, height - 30);
@@ -75,7 +72,6 @@ function draw() {
   myfallBody.show();
   myfallBody.update();
   fill('#DFDCE3');
-  text(paddy(myTimer.min, 2) + ':' + paddy(myTimer.sec, 2) + ':' + paddy(myTimer.mili, 3), 320, 20);
 }
 
 fallButton.addEventListener('click', () => {
@@ -86,6 +82,7 @@ fallButton.addEventListener('click', () => {
 fallHeightRange.addEventListener('change', () => {
   worldData.fallHeight = fallHeightRange.value;
   startingPointPx = canvasHeight - fallHeightRange.value / worldScale - 30;
+  myfallBody.setY(startingPointPx - 30);
   // worldScale = worldData.fallHeight / fallHeightPx;
 });
 
@@ -153,12 +150,6 @@ moonIcon.addEventListener('click', () => {
   strokeColour = 'white';
 });
 
-setInterval(function () {
-  if (myTimer.running) {
-    myTimer.count();
-  }
-}, 10);
-
 function cookieParser(cookieString) {
   if (!cookieString) {
     return null;
@@ -178,7 +169,7 @@ function cookieParser(cookieString) {
 
 function createFallBody(showVel, showEn) {
   let bodyMass;
-  worldData.bodyMass = objectMass.value;
+  worldData.bodyMass = objectMass.value.replace(/\D+/g, '');
   if (worldData.bodyMass == '') {
     worldData.bodyMass = 1;
   }
@@ -203,7 +194,7 @@ function startFall() {
   let initialVel;
 
   if (initialVelocityCheck.checked) {
-    worldData.initialVelocity = parseFloat(initialVelocity.value);
+    worldData.initialVelocity = parseFloat(initialVelocity.value.replace(/\D+/g, ''));
     switch (worldData.initialVelocityUn) {
       case 'ms':
         initialVel = worldData.initialVelocity;
@@ -221,6 +212,14 @@ function startFall() {
   }
   myfallBody.fall(initialVel);
 }
+
+document.addEventListener('keypress', function(e){
+  console.log("aa")
+  if(e.key == ' '){
+    console.log("SPACE!");
+    fallButton.click();
+  }
+})
 
 function deleteAllCookies() {
   var cookies = document.cookie.split(';');

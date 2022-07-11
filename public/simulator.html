@@ -16,7 +16,7 @@
   <body>
     <div class="main-container">
       <div class="title-container">
-        <h1 class="display-3">Simulador de Impacto</h1>
+        <h1 class="display-3">Simulador de Queda Livre</h1>
       </div>
       <div class="content-container">
         <div class="object-control-container">
@@ -34,10 +34,10 @@
             </div>
             <span class="height-slider-label">Altura da queda</span>
           </div>
-          <label class="custom-field" id="input1">
-            <input id="object-mass-input" type="text" required />
-            <span class="placeholder">Massa do objeto (em kg)</span>
-          </label>
+          <div class="object-mass">
+            <label>Massa do objeto (em kg)</label>
+            <input class="object-mass-input" id="object-mass-input" type="text" placeholder="Ex: 10" />
+          </div>
           <div class="switch-container">
             <label class="switch">
               <input id="show-velocity-check" type="checkbox" />
@@ -53,17 +53,17 @@
             <span class="switch-text">Mostrar Energia Cinética</span>
           </div>
           <div class="switch-container speed">
-            <div style="margin: 0">
+            <div style="margin: 0; margin-right: auto;">
               <label class="switch">
                 <input id="initial-velocity-check" type="checkbox" />
                 <span class="slider round"></span>
               </label>
               <span class="switch-text">Velocidade Inicial</span>
             </div>
-            <label class="custom-field" id="velocity">
-              <input id="initial-velocity-input" type="text" required />
-              <span class="placeholder">Velocidade Inicial (em m/s)</span>
-            </label>
+            <div class="initial-velocity">
+              <label class="custom-field v" id="velocity">Velocidade Inicial (em m/s)</label>
+              <input id="initial-velocity-input" type="text" placeholder="Ex: 32" required />
+            </div>
           </div>
           <div class="button-container">
             <button class="custom-button" id="fall-button">Soltar Corpo</button>
@@ -103,6 +103,12 @@
               <span class="planet-gravity">Aceleração gravitacional: 1.6m/s²</span>
             </div>
           </div>
+          <div class="forms-container">
+            <h3 class="forms-text">Se divertindo? Responda umas perguntas para ajudar a melhorar o projeto!</h3>
+            <form action="https://forms.gle/2nAgrm9cSVRMCVyv8" target="_blank">
+              <button type="submit" class="custom-button g" id="forms-button">Responder Pesquisa</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -112,14 +118,13 @@
       inputSlider.oninput = () => {
         let value = inputSlider.value;
         sliderValue.textContent = value;
-        sliderValue.style.left = value + '%';
+        sliderValue.style.left = (value) + '%';
         sliderValue.classList.add('show');
       };
       inputSlider.onblur = () => {
         sliderValue.classList.remove('show');
       };
     </script>
-    <script src="timer.js"></script>
     <script src="sketch.js"></script>
     <script src="fallBody.js"></script>
     <script src="barrier.js"></script>

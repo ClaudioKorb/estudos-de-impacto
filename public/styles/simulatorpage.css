@@ -81,6 +81,7 @@ body {
 }
 .content-container .object-control-container .range .height-slider-label {
   margin-top: 5px;
+  margin-left: 20px;
   padding-left: 5px;
   padding-right: 5px;
   font-weight: 400;
@@ -136,6 +137,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
+  margin: 0;
 }
 
 .content-container .object-control-container .range .field .value {
@@ -148,7 +150,7 @@ body {
   left: -22px;
 }
 .content-container .object-control-container .range .field .value.right {
-  right: -43px;
+  right: -50px;
 }
 .content-container .object-control-container .range .field input {
   -webkit-appearance: none;
@@ -189,7 +191,7 @@ body {
   width: 97%;
   padding-top: 10px;
   height: 100px;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
 }
 
@@ -272,52 +274,37 @@ body {
   text-align: center;
   color: var(--alice-blue);
 }
-
-.custom-field {
-  position: relative;
-  font-size: 14px;
-  padding-top: 20px;
-  margin-bottom: 5px;
-  margin-top: 25px;
+.object-mass{
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 20px);
 }
 
-.custom-field input {
-  border: none;
-  -webkit-appearance: none;
-  -ms-appearance: none;
-  -moz-appearanca: none;
-  appearance: none;
-  padding: 12px;
-  border-radius: 0px;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  width: 420px;
-  min-width: 200px;
-  outline: none;
-  background: linear-gradient(90deg, var(--slate-blue), var(--slate-blue)) left bottom/0 2px no-repeat, linear-gradient(90deg, #ccc, #ccc) left bottom/100% 2px no-repeat,
-    linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
-  transition: background-size 0.3s ease;
+.object-mass input{
+  height: 30px;
+  width: 100%;
 }
 
-.custom-field input:valid,
-.custom-field input:focus {
-  background-size: 100% 2px, 100% 2px, 100%;
+.initial-velocity{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin-top: 5px;
+  margin-right: 20px;
+  margin-left: 10px;
 }
 
-.custom-field .placeholder {
-  position: absolute;
-  left: 12px;
-  top: calc(50% + 10px);
-  transform: translateY(-50%);
-  color: #aaa;
-  transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+.initial-velocity label{
+  margin-bottom: -5px;
 }
-
-.custom-field input:valid + .placeholder,
-.custom-field input:focus + .placeholder {
-  top: 10px;
-  font-size: 12px;
-  color: #222;
+.initial-velocity input{
+  margin-top: -5px;
+  height: 30px;
 }
 /* Custom Switches */
 /* The switch - the box around the slider */
@@ -389,10 +376,6 @@ input:checked + .slider:before {
   margin-bottom: 10px;
 }
 
-#velocity input {
-  width: 400px;
-}
-
 .custom-button {
   letter-spacing: 4px;
   width: 200px;
@@ -419,4 +402,38 @@ input:checked + .slider:before {
 
 .custom-button.r:hover {
   box-shadow: inset 250px 0 0 0 var(--paradise-pink);
+}
+
+.forms-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 50px;
+}
+
+.forms-text{
+  font-weight: 200;
+  margin-top: 0;
+  text-align: center;
+}
+
+.custom-button.g {
+  background-color: var(--eerie-black);
+  box-shadow: inset 0 0 0 0 grey;
+  letter-spacing: 4px;
+  width: 350px;
+  height: 50px;
+  border: none;
+  color: var(--fluorescent-blue);
+  border-radius: 4px;
+  transition: ease-out 0.2s;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+}
+
+.custom-button.g:hover{
+  box-shadow: inset -350px 0 0 0  grey;
 }
