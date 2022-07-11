@@ -5,8 +5,6 @@ let socket; //socket used to send data to the server
 //Body related variables
 let myfallBody;
 let bottomBarrier;
-let myTimer = new Timer();
-let timerFont;
 
 //Drawing related variables
 let framerate = 120;
@@ -90,7 +88,6 @@ function setup() {
   //-----------------------------------------------
   //Defining variables for the texts shown on the sketch screen
   textSize(18);
-  textFont(timerFont);
   //------------------------------------------------
   //Creating instances for bottom barrier and fall body
   bottomBarrier = new Barrier(0, height - barrierHeightPx, width, height - barrierHeightPx);
@@ -161,10 +158,6 @@ function setup() {
   });
 }
 
-function preload() {
-  timerFont = loadFont('assets\\fonts\\Roboto-Thin.ttf');
-}
-
 function draw() {
   background(bg);
   myfallBody.show();
@@ -177,16 +170,9 @@ function draw() {
       //myfallBody.show();
       //bottomBarrier.show();
       fill('#DFDCE3');
-      text(paddy(myTimer.min, 2) + ':' + paddy(myTimer.sec, 2) + ':' + paddy(myTimer.mili, 3), 320, 20);
     }
   }
 }
-
-setInterval(function () {
-  if (myTimer.running) {
-    myTimer.count();
-  }
-}, 10);
 
 class ruler {
   constructor(size, maxPixels, scale) {

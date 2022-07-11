@@ -26,7 +26,6 @@ class fallBody {
     ellipse(this.xpos, this.ypos, this.diameter, this.diameter);
     noFill();
     stroke('white');
-    textFont(timerFont);
     textAlign(CENTER);
     text(this.mass + ' kg', this.xpos, this.ypos + (textSize() / 2 - 2));
   }
@@ -125,7 +124,6 @@ class tooltip {
       textSize(13);
       noFill();
       stroke(strokeColour);
-      textFont(timerFont);
       text('V = ' + roundIt(speed, 1) + ' m/s', this.xpos + 60, this.ypos - 5);
     }
   }
@@ -140,7 +138,6 @@ class tooltip {
       textSize(13);
       noFill();
       stroke(strokeColour);
-      textFont(timerFont);
       text('E = ' + roundIt(energy, 2) + ' J', this.xpos - 80, this.ypos - 25);
     }
   }
