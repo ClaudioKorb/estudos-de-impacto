@@ -41,10 +41,11 @@ body {
 
 .content-container {
   margin: 0;
+  width: 100%;
   height: 100%;
   background-color: var(--alice-blue);
   display: flex;
-  justify-content: left;
+  justify-content: space-evenly;
 }
 
 .content-container .object-control-container {
@@ -53,7 +54,7 @@ body {
   margin-left: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  width: 450px;
+  width: 30%;
   height: (100%-10px);
   margin-bottom: 10px;
   border: solid;
@@ -63,9 +64,34 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 60%;
   overflow: hidden;
   background-color: #e5ddf8;
 }
+
+@media screen and (max-height: 1024px) {
+  .content-container .object-control-container {
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 30%;
+    height: (100%-10px);
+    margin-bottom: 10px;
+    border: solid;
+    border-color: var(--eerie-black);
+    border-width: 1px;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    overflow: hidden;
+    background-color: #e5ddf8;
+  }
+}
+
 
 .content-container .object-control-container .range {
   margin-left: 10px;
@@ -222,7 +248,8 @@ body {
   margin-left: 20px;
   margin-right: 10px;
   height: (100%-10px);
-  width: 450px;
+  width: 30%;
+  height: 60%;
   border: solid;
   border-color: var(--eerie-black);
   border-width: 1px;
@@ -233,6 +260,29 @@ body {
   overflow: hidden;
   background-color: #e5ddf8;
 }
+
+@media screen and (max-height: 1024px) {
+  #planet-selector {
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 10px;
+    height: (100%-10px);
+    width: 30%;
+    height: 90%;
+    border: solid;
+    border-color: var(--eerie-black);
+    border-width: 1px;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: c ter;
+    overflow: hidden;
+    background-color: #e5ddf8;  }
+}
+
 .planet-container {
   height: 70px;
   margin-top: 10px;
